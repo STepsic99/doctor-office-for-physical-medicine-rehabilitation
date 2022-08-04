@@ -5,7 +5,7 @@
     <router-link to="/about">About</router-link>
   </nav>-->
   <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm px-5 py-3 py-lg-0">
-        <a href="index.html" class="navbar-brand p-0">
+        <a href="/" class="navbar-brand p-0">
             <h1 class="m-0 text-primary"><i class="fa fa-heartbeat me-2"></i>Relax</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -28,7 +28,7 @@
                 <a href="contact.html" class="nav-item nav-link">Kontakt</a>
             </div>
             <button type="button" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
-            <a href="appointment.html" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
+            <a href="login" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
         </div>
     </nav>
   <router-view/>
@@ -151,5 +151,4 @@ nav a.router-link-exact-active {
 
 @import url(css/style.css);
 @import url(https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap);
-@import url(https://fonts.gstatic.com);
 </style>
