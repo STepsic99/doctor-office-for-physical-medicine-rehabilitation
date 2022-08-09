@@ -28,10 +28,13 @@
                 <a href="contact.html" class="nav-item nav-link">Kontakt</a>
             </div>
             <button type="button" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
-            <a href="login" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
+            <a href="login" v-if="!this.role" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
+            <a v-on:click="logout" v-if="this.role" class="btn btn-primary py-2 px-4 ms-3">Odjavite se</a>
         </div>
     </nav>
+
   <router-view/>
+
 </div>
       <div class="container-fluid  animated animatedFadeInUp fadeInUp footer" style="padding:2%">
         <table style="width:100%">
@@ -70,6 +73,35 @@
         </table>
     </div>
 </template>
+
+<script>
+import shared from './shared'
+
+export default {
+  name: 'App',
+  mounted: function(){
+      this.role=shared.getRoleFromToken();
+  },
+  data: function(){
+    return {
+      role: ''
+    }
+  },
+  watch:{
+		$route (to, from){
+			this.role=shared.getRoleFromToken();
+		}
+  },
+  methods: {
+    logout: function(){
+      window.sessionStorage.clear()
+      this.role = ''
+      this.$router.push('/');
+    }
+  }
+  
+}
+</script>
 
 <style>
 #app {
