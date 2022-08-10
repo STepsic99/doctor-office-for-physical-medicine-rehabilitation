@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import shared from '../shared'
+import AppointmentCalendar from '../views/AppointmentCalendar.vue'
 
 const routes = [
   {
@@ -18,7 +19,13 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-  { path: '/login', name: 'Login', component: Login }
+  { path: '/login', name: 'Login', component: Login },
+  {
+    path: '/calendar',
+    name: 'appointmentCalendar',
+    component: AppointmentCalendar,
+    meta: { requiresAuth: true, role: "ROLE_NURSE" },
+  },
 ]
 
 const router = createRouter({

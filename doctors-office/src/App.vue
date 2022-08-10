@@ -13,10 +13,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="index.html" class="nav-item nav-link active">Naslovna</a>
-                <a href="about.html" class="nav-item nav-link">Usluge</a>
-                <a href="service.html" class="nav-item nav-link">O nama</a>
-                <div class="nav-item dropdown">
+                <a href="/" class="nav-item nav-link active">Naslovna</a>
+                <a href="calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar termina</a>
+                <a href="about.html" v-if="!this.role" class="nav-item nav-link">Usluge</a>
+                <a href="service.html" v-if="!this.role" class="nav-item nav-link">O nama</a>
+                <div v-if="!this.role" class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a href="price.html" class="dropdown-item">Pricing Plan</a>
@@ -25,9 +26,9 @@
                         <a href="appointment.html" class="dropdown-item">Appointment</a>
                     </div>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Kontakt</a>
+                <a href="contact.html" v-if="!this.role" class="nav-item nav-link">Kontakt</a>
             </div>
-            <button type="button" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
+            <button type="button" v-if="!this.role" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
             <a href="login" v-if="!this.role" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
             <a v-on:click="logout" v-if="this.role" class="btn btn-primary py-2 px-4 ms-3">Odjavite se</a>
         </div>
