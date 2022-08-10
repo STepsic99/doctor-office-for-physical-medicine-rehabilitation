@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,11 +20,11 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 
 @Entity
-@Table(name = "users")
-public class User implements UserDetails{
-	private static final long serialVersionUID = 1L;
+@Inheritance(strategy = TABLE_PER_CLASS)
+public abstract class User implements UserDetails{
 
     @Id
     @SequenceGenerator(name = "mySeqGenUsers", sequenceName = "mySeqUsers", initialValue = 1, allocationSize = 1)
