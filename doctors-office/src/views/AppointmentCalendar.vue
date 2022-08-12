@@ -26,7 +26,7 @@
                 <h4 style=" display: inline;" class="card-title">Kreirajte novi pregled</h4> <span style=" display: inline; float:right" class="form-check form-switch">
                 <input v-model="oldPatient" class="form-check-input" type="checkbox"> </span>
                 <br>
-                <div style=" float:right;font-style: italic; zoom:0.8;" v-if="!oldPatient">Postojeći pacijent </div>
+                <div style=" float:right;font-style: italic; zoom:0.8;" v-if="oldPatient">Postojeći pacijent </div>
                 <div style=" float:right;font-style: italic; zoom:0.8;" v-else>Novi pacijent </div>
                 <br>
                 <span style="margin-top: 1.33em;" class="row">
@@ -38,7 +38,7 @@
                 </select>      
                 </div>      
                 <div style="padding-left:5%;" class="col-6">
-                     <PatientList msg="Welcome to Your Vue.js App"/>
+                     <PatientList :existingPatient='oldPatient'/>
                 </div>   
                 </span>
                 <br>
@@ -105,7 +105,7 @@ export default {
           events: [
           ]
         },
-        oldPatient:false
+        oldPatient:true
     }
   },
   mounted: function(){

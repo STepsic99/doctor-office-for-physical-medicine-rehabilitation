@@ -1,6 +1,6 @@
 <template>
-<div>
-<form class="row d-flex justify-content-between g-3 ">
+<div v-if="existingPatient">
+<form v-if="!personChosen" class="row d-flex justify-content-between g-3 ">
   <div class="col-5">
    <input type="text" class="form-control" placeholder="Ime">
   </div>
@@ -22,34 +22,63 @@
     </td>
     <td>
       <div>
-      <h5 class="mb-0" style="color:#0d6efd;">Ime Prezime</h5>
-      <i class="fa fa-phone" aria-hidden="true"></i> 0000000
+      <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">Ime Prezime</h5>
+      <i class="fas fa-id-card" aria-hidden="true"></i> 0810999122333
       </div>
     </td>
     <td>
-      <button type="button" class="btn btn-primary">Izaberi</button>
+      <i v-if="personChosen" class="fa fa-times" aria-hidden="true" style="color:red;zoom:2;margin-left:60%;cursor: pointer;" v-on:click="rechoosePerson()"></i>
+      <button v-if="!personChosen" type="button" class="btn btn-primary" v-on:click="choosePerson()">Izaberi</button>
     </td>
   </tr>
   </tbody>
 </table>
 </div>
 </div>
+<div v-else>
+  <form class="row d-flex justify-content-between">
+  <div class="col-6">
+   <input type="text" class="form-control" placeholder="Ime">
+  </div>
+  <div class="col-6">
+    <input type="text" class="form-control" placeholder="Prezime">
+  </div>
+</form>
+<form style="margin-top: 1.33em;" class="row d-flex justify-content-between">
+  <div class="col-6">
+   <input type="text" class="form-control" placeholder="Broj telefona">
+  </div>
+  <div class="col-6">
+    <Datepicker :enableTimePicker="false" ></Datepicker>
+  </div>
+</form>
+</div>
 </template>
 
 <script>
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css'
 export default {
   name: 'PatientList',
+  components: {Datepicker},
   props: {
-    msg: String
+    existingPatient: Boolean
   },
    data: function(){
     return {
-        showList: false
+        showList: false,
+        personChosen: false
     }
   },
   methods: {
     searchPeople: function(){
       this.showList=true;
+    },
+     choosePerson: function(){
+      this.personChosen=true;
+    },
+    rechoosePerson: function(){
+      this.personChosen=false;
     }
   }
 }
