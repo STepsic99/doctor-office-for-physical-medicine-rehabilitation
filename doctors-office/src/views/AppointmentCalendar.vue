@@ -20,7 +20,7 @@
         
 
         <div v-if="createNewAppointment.formVisible" class="row d-flex justify-content-center" style="margin-top: 30px;">
-          <div class="col-8">
+          <div class="col-10">
             <div class="card">
               <div class="card-body">
                 <h4 style=" display: inline;" class="card-title">Kreirajte novi pregled</h4> <span style=" display: inline; float:right" class="form-check form-switch">
@@ -44,7 +44,7 @@
                 <br>
                 <p class="card-text text-danger">{{createNewAppointment.msg}}</p>
                 <button class="btn btn-danger m-1" v-on:click="createNewAppointment.formVisible=false">Odustani</button>
-                <button :disabled="!createNewAppointment.valid" class="btn btn-success m-1" v-on:click="addNewAppointment()">Dodaj</button>
+                <button :disabled="!createNewAppointment.valid" class="btn btn-success m-1" v-on:click="addNewAppointment()">Kreiraj</button>
               </div>
             </div>
           </div>

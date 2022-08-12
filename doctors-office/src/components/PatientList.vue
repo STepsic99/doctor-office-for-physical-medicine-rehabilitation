@@ -1,13 +1,17 @@
 <template>
 <div v-if="existingPatient">
-<form v-if="!personChosen" class="row d-flex justify-content-between g-3 ">
-  <div class="col-5">
-   <input type="text" class="form-control" placeholder="Ime">
+<form v-if="!personChosen" class="row d-flex justify-content-between">
+  <div class="col-11">
+  <div class="input-group">
+<select class="form-select" v-model="searchOption" id="inputGroupSelect01">   
+    <option value="1">Ime i prezime</option>
+    <option value="2">JMBG</option>
+  </select>
+  <input type="text" class="form-control">
+  <input v-if="searchOption==1" type="text" class="form-control">
+</div>
   </div>
-  <div class="col-5">
-    <input type="text" class="form-control" placeholder="Prezime">
-  </div>
-  <div class="col-2">
+  <div class="col-1">
     <button type="button" class="btn btn-primary mb-3" v-on:click="searchPeople()">Pretraži</button>
   </div>
 </form>
@@ -44,12 +48,12 @@
     <input type="text" class="form-control" placeholder="Prezime">
   </div>
 </form>
-<form style="margin-top: 1.33em;" class="row d-flex justify-content-between">
+<form style="margin-top: 1.8em;" class="row d-flex justify-content-between">
   <div class="col-6">
    <input type="text" class="form-control" placeholder="Broj telefona">
   </div>
   <div class="col-6">
-    <Datepicker :enableTimePicker="false" ></Datepicker>
+    <input type="text" class="form-control" placeholder="JMBG (opciono)">
   </div>
 </form>
 </div>
@@ -67,7 +71,8 @@ export default {
    data: function(){
     return {
         showList: false,
-        personChosen: false
+        personChosen: false,
+        searchOption:1
     }
   },
   methods: {
