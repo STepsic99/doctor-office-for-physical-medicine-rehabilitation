@@ -20,16 +20,28 @@
         
 
         <div v-if="createNewAppointment.formVisible" class="row d-flex justify-content-center" style="margin-top: 30px;">
-          <div class="col-4">
+          <div class="col-8">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Kreirajte novi pregled</h4>
+                <h4 style=" display: inline;" class="card-title">Kreirajte novi pregled</h4> <span style=" display: inline; float:right" class="form-check form-switch">
+                <input v-model="oldPatient" class="form-check-input" type="checkbox"> </span>
+                <br>
+                <div style=" float:right;font-style: italic; zoom:0.8;" v-if="!oldPatient">Postojeći pacijent </div>
+                <div style=" float:right;font-style: italic; zoom:0.8;" v-else>Novi pacijent </div>
+                <br>
+                <span style="margin-top: 1.33em;" class="row">
+                <div class="col-5">
                 <Datepicker v-on:click="showcreateNewAppointmentForm()" v-model="createNewAppointment.date" range></Datepicker>
                 <select class="form-select" v-model="createNewAppointment.type" style="margin-top: 30px;">
                   <option value="EXAMINATION">PREGLED</option>
                   <option value="CONTROL_EXAMINATION">KONTROLNI PREGLED</option>
-                </select> <br>
-
+                </select>      
+                </div>      
+                <div style="padding-left:5%;" class="col-6">
+                     <PatientList msg="Welcome to Your Vue.js App"/>
+                </div>   
+                </span>
+                <br>
                 <p class="card-text text-danger">{{createNewAppointment.msg}}</p>
                 <button class="btn btn-danger m-1" v-on:click="createNewAppointment.formVisible=false">Odustani</button>
                 <button :disabled="!createNewAppointment.valid" class="btn btn-success m-1" v-on:click="addNewAppointment()">Dodaj</button>
@@ -56,14 +68,15 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction'
-
+import PatientList from '@/components/PatientList.vue';
 
 
 export default {
   name: 'AppointmentCalendar',
   components: {
     FullCalendar,
-    Datepicker
+    Datepicker,
+    PatientList
   },
   data: function(){
     return {
@@ -91,7 +104,8 @@ export default {
           },
           events: [
           ]
-        }
+        },
+        oldPatient:false
     }
   },
   mounted: function(){
@@ -117,7 +131,7 @@ export default {
       }
     },
     addNewAppointment: function(){
-       
+       console.log(this.oldPatient)
     },
     overlap: function(){
         for(const event of this.calendarOptions.events){

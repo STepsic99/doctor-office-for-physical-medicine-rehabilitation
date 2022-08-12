@@ -179,7 +179,7 @@ nav a.router-link-exact-active {
 
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css);
 @import url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css);
-
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
 
 
 @import url(css/style.css);
