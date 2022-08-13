@@ -122,7 +122,7 @@ export default {
      choosePerson: function(choosenID){
       this.chosenPersonID = choosenID
       this.personChosen=true;
-      console.log(this.chosenPersonID)
+      this.$emit('chosenPerson', choosenID)
     },
     rechoosePerson: function(){
       this.personChosen=false;

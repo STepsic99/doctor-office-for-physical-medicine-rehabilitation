@@ -4,22 +4,20 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Entity
-public class AppointmentDoctor extends Appointment{
+public class AppointmentPhysiotherapist extends Appointment{
 	
-	@OneToOne
-	private Report report;
-
-	public AppointmentDoctor() {
+	private Boolean patientPresent;
+	private String note;
+	
+	public AppointmentPhysiotherapist() {
 		super();
 	}
-
-	public AppointmentDoctor(Patient patient, Set<Service> services, MedicalWorker medicalWorker,
+	public AppointmentPhysiotherapist(Patient patient, Set<Service> services, MedicalWorker medicalWorker,
 			LocalDateTime startTime, LocalDateTime endTime) {
 		super(patient, services, medicalWorker, startTime, endTime);
 	}
-	
+
 	
 }

@@ -1,6 +1,7 @@
 package com.doctorsoffice.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,13 @@ private final PatientRepository patientRepository;
 	@Override
 	public List<Patient> findAllByPersonalID(String personalID) {
 		return patientRepository.findAllByPersonalID(personalID);
+	}
+
+	@Override
+	public Patient findById(Long id) {
+		Optional<Patient> patient= patientRepository.findById(id);
+		if(patient.isPresent()) return patient.get();
+		return null;
 	}
 
 }

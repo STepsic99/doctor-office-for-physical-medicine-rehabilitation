@@ -34,6 +34,47 @@ public abstract class Appointment {
 	private LocalDateTime startTime;
     private LocalDateTime endTime;
     
+	public Appointment() {
+		super();
+	}
+
+	public Appointment(Patient patient, Set<Service> services, MedicalWorker medicalWorker, LocalDateTime startTime,
+			LocalDateTime endTime) {
+		super();
+		this.patient = patient;
+		this.services = services;
+		this.medicalWorker = medicalWorker;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public Set<Service> getServices() {
+		return services;
+	}
+
+	public MedicalWorker getMedicalWorker() {
+		return medicalWorker;
+	}
+
+	public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+	public LocalDateTime getEndTime() {
+		return endTime;
+	}
+	
+	
+    
+    
     
     
 }

@@ -35,15 +35,15 @@
                 <select class="form-select" v-model="createNewAppointment.type" style="margin-top: 30px;">
                    <option
             v-for="option in services"
-            :value="option.name"
             :key="option.id"
+            :value="option"
           >
           {{ option.name }}
           </option>
                 </select>      
                 </div>      
                 <div style="padding-left:5%;" class="col-6">
-                     <PatientList :existingPatient='oldPatient'/>
+                     <PatientList :existingPatient='oldPatient' @chosenPerson="changeChosenPerson"/>
                 </div>   
                 </span>
                 <br>
@@ -93,7 +93,7 @@ export default {
         createNewAppointment:{
           date: [],
           formVisible: false,
-          type: 'PREGLED',
+          type: {},
           msg: '',
           valid: true,
         },
@@ -111,7 +111,8 @@ export default {
           ]
         },
         oldPatient:true,
-        services:[]
+        services:[],
+        chosenPatientId:''
     }
   },
   mounted: function(){
@@ -142,7 +143,22 @@ export default {
       }
     },
     addNewAppointment: function(){
-       console.log(this.oldPatient)
+      const pickedServices = []
+      pickedServices.push(this.createNewAppointment.type)
+      console.log(pickedServices)
+       axios.defaults.headers.common.Authorization =
+        'Bearer ' + window.sessionStorage.getItem('jwt')
+        axios
+        .post("http://localhost:8180/api/v1/appointments", {
+          patientID: this.chosenPatientId,
+          startTime: this.createNewAppointment.date[0],
+          endTime: this.createNewAppointment.date[1],
+          services: pickedServices,
+          medicalWorkerID: 1
+        })
+        .then((response) =>{
+         console.log(response.data)
+        });
     },
     overlap: function(){
         for(const event of this.calendarOptions.events){
@@ -168,6 +184,9 @@ export default {
     closeSelectedReservation: function(){
        this.selectedReservation = null;
        this.showSelectedReservation = false; 
+    },
+    changeChosenPerson (value) {
+      this.chosenPatientId = value
     }
   }
 }
