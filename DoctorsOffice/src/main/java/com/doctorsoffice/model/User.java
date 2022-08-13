@@ -46,6 +46,9 @@ public abstract class User implements UserDetails{
 
     @Column(name = "phoneNumber", unique = false, nullable = false)
     private String phoneNumber;
+    
+    @Column(name = "personalID", unique = true, nullable = true)
+    private String personalID;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",

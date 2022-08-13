@@ -17,12 +17,36 @@ public class Service {
 	@Enumerated(EnumType.STRING)
 	private StaffType staffType;
 	
+	
+	
+	public Service() {
+		super();
+	}
+
 	public Service(String name, double price, StaffType staffType) {
 		super();
 		this.name = name;
 		this.price = price;
 		this.staffType = staffType;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public StaffType getStaffType() {
+		return staffType;
+	}
+	
+	
 	
 	
 }

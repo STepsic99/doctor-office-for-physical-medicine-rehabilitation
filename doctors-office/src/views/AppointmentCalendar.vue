@@ -33,8 +33,13 @@
                 <div class="col-5">
                 <Datepicker v-on:click="showcreateNewAppointmentForm()" v-model="createNewAppointment.date" range></Datepicker>
                 <select class="form-select" v-model="createNewAppointment.type" style="margin-top: 30px;">
-                  <option value="EXAMINATION">PREGLED</option>
-                  <option value="CONTROL_EXAMINATION">KONTROLNI PREGLED</option>
+                   <option
+            v-for="option in services"
+            :value="option.name"
+            :key="option.id"
+          >
+          {{ option.name }}
+          </option>
                 </select>      
                 </div>      
                 <div style="padding-left:5%;" class="col-6">
@@ -88,7 +93,7 @@ export default {
         createNewAppointment:{
           date: [],
           formVisible: false,
-          type: 'EXAMINATION',
+          type: 'PREGLED',
           msg: '',
           valid: true,
         },
@@ -105,12 +110,18 @@ export default {
           events: [
           ]
         },
-        oldPatient:true
+        oldPatient:true,
+        services:[]
     }
   },
   mounted: function(){
       this.calendarOptions.select = this.selectInCalendar;
       this.calendarOptions.eventClick = this.eventClickCalendar;
+      axios
+        .get('http://localhost:8180/api/v1/services/doctor')
+        .then((response) => {
+          this.services = response.data
+        })
   },
   methods: {
     showcreateNewAppointmentForm: function(){
