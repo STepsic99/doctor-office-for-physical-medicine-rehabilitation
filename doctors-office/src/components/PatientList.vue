@@ -7,8 +7,8 @@
     <option value="1">Ime i prezime</option>
     <option value="2">JMBG</option>
   </select>
-  <input type="text" class="form-control">
-  <input v-if="searchOption==1" type="text" class="form-control">
+  <input type="text" v-model="searchedNameID" class="form-control">
+  <input v-if="searchOption==1" type="text" v-model="searchedLastName" class="form-control">
 </div>
   </div>
   <div class="col-1">
@@ -18,7 +18,7 @@
 <div v-if="showList">
 <table style="width: 100%;">
   <tbody>
-  <tr>
+  <!--<tr>
     <td>
       <div class="thumb">
                     <img class="img-fluid" src="../assets/person.png" alt="">
@@ -34,7 +34,24 @@
       <i v-if="personChosen" class="fa fa-times" aria-hidden="true" style="color:red;zoom:2;margin-left:60%;cursor: pointer;" v-on:click="rechoosePerson()"></i>
       <button v-if="!personChosen" type="button" class="btn btn-primary" v-on:click="choosePerson()">Izaberi</button>
     </td>
-  </tr>
+  </tr>-->
+  <tr v-for="p in foundPeople" :key="p.id">
+      <td>
+        <div class="thumb">
+                    <img class="img-fluid" src="../assets/person.png" alt="">
+      </div>
+      </td>
+      <td>
+        <div>
+      <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">{{p.firstName}} {{p.lastName}}</h5>
+      <i class="fas fa-id-card" aria-hidden="true"></i> {{p.personalID}}
+      </div>
+      </td>
+      <td>
+      <i v-if="personChosen" class="fa fa-times" aria-hidden="true" style="color:red;zoom:2;margin-left:60%;cursor: pointer;" v-on:click="rechoosePerson()"></i>
+      <button v-if="!personChosen" type="button" class="btn btn-primary" v-on:click="choosePerson(p.id)">Izaberi</button>
+    </td>
+     </tr>
   </tbody>
 </table>
 </div>
@@ -62,6 +79,7 @@
 <script>
 import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css'
+import axios from "axios";
 export default {
   name: 'PatientList',
   components: {Datepicker},
@@ -72,15 +90,39 @@ export default {
     return {
         showList: false,
         personChosen: false,
-        searchOption:1
+        searchOption:1,
+        searchedNameID:'',
+        searchedLastName:'',
+        foundPeople:[],
+        chosenPersonID:''
     }
   },
   methods: {
     searchPeople: function(){
-      this.showList=true;
+      if(this.searchOption===1){
+      axios.defaults.headers.common.Authorization =
+        'Bearer ' + window.sessionStorage.getItem('jwt')
+      axios
+        .get('http://localhost:8180/api/v1/patients?first-name='+this.searchedNameID+'&last-name='+this.searchedLastName)
+        .then((response) => {
+          this.foundPeople = response.data
+          this.showList=true;
+        })
+      } else{
+        axios.defaults.headers.common.Authorization =
+        'Bearer ' + window.sessionStorage.getItem('jwt')
+      axios
+        .get('http://localhost:8180/api/v1/patients?personal-ID='+this.searchedNameID)
+        .then((response) => {
+          this.foundPeople = response.data
+          this.showList=true;
+        })
+      }
     },
-     choosePerson: function(){
+     choosePerson: function(choosenID){
+      this.chosenPersonID = choosenID
       this.personChosen=true;
+      console.log(this.chosenPersonID)
     },
     rechoosePerson: function(){
       this.personChosen=false;
