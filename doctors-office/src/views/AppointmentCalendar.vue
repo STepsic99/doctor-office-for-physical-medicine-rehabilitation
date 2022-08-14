@@ -203,7 +203,7 @@ export default {
                 a.description = "opis"
                 a.editable = false
                 a.overlap = false
-                a.title="aa"
+                a.title=a.services
                 this.calendarOptions.events.push(a);
             }
       });
@@ -278,6 +278,7 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
+          window.location.reload();
         });
     },
     overlap: function () {
