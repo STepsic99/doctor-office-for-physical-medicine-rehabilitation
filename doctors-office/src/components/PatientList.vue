@@ -56,24 +56,7 @@
 </table>
 </div>
 </div>
-<div v-else>
-  <form class="row d-flex justify-content-between">
-  <div class="col-6">
-   <input type="text" class="form-control" placeholder="Ime">
-  </div>
-  <div class="col-6">
-    <input type="text" class="form-control" placeholder="Prezime">
-  </div>
-</form>
-<form style="margin-top: 1.8em;" class="row d-flex justify-content-between">
-  <div class="col-6">
-   <input type="text" class="form-control" placeholder="Broj telefona">
-  </div>
-  <div class="col-6">
-    <input type="text" class="form-control" placeholder="JMBG (opciono)">
-  </div>
-</form>
-</div>
+
 </template>
 
 <script>
@@ -121,6 +104,10 @@ export default {
     },
      choosePerson: function(choosenID){
       this.chosenPersonID = choosenID
+      for (var i = 0; i < this.foundPeople.length; i++){
+          if(this.foundPeople[i].id != choosenID) 
+            {this.foundPeople.splice(i,1)};
+      }
       this.personChosen=true;
       this.$emit('chosenPerson', choosenID)
     },

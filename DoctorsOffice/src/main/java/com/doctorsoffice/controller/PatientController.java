@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.doctorsoffice.dto.NewPatientRequestDTO;
+import com.doctorsoffice.dto.NewPatientResponseDTO;
 import com.doctorsoffice.dto.PatientDTO;
 import com.doctorsoffice.model.Patient;
 import com.doctorsoffice.service.PatientService;
@@ -48,4 +53,9 @@ public class PatientController {
 	        return ResponseEntity.ok(responseDTOS);
 	        
 	    }
+	 
+	 @PostMapping
+	    public ResponseEntity<NewPatientResponseDTO> create(@RequestBody NewPatientRequestDTO dto) {
+	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewPatientResponseDTO(patientService.create(dto)));
+		}
 }

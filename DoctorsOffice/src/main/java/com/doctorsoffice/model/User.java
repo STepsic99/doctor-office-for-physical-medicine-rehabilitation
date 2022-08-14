@@ -27,15 +27,15 @@ import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 public abstract class User implements UserDetails{
 
     @Id
-    @SequenceGenerator(name = "mySeqGenUsers", sequenceName = "mySeqUsers", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "mySeqGenUsers", sequenceName = "mySeqUsers", initialValue = 5, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenUsers")
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = true)
     private String username;
 
-    @Column(name = "password", unique = false, nullable = false)
+    @Column(name = "password", unique = false, nullable = true)
     private String password;
 
     @Column(name = "firstName", unique = false, nullable = false)
@@ -74,7 +74,15 @@ public abstract class User implements UserDetails{
 		this.phoneNumber = phoneNumber;
 		this.roles = roles;
 	}
-
+    
+	public User(String firstName, String lastName, String phoneNumber, String personalID, List<Role> roles) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.personalID = personalID;
+		this.roles = roles;
+	}
 
 	public void setId(Long id) {
         this.id = id;

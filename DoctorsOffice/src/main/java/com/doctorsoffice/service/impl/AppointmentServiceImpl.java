@@ -37,11 +37,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 		if(medicalWorker instanceof Doctor) {
 			AppointmentDoctor newAppointment = new AppointmentDoctor(patientService.findById(dto.getPatientID()),dto.getServices(),medicalWorker,dto.getStartTime(),dto.getEndTime());
 			appointmentRepository.save(newAppointment);
+			return newAppointment;
 		} else if(medicalWorker instanceof Physiotherapist) {
 			AppointmentPhysiotherapist newAppointment = new AppointmentPhysiotherapist(patientService.findById(dto.getPatientID()),dto.getServices(),medicalWorker,dto.getStartTime(),dto.getEndTime());
 			appointmentRepository.save(newAppointment);
+			return newAppointment;
 		}
-		return new AppointmentDoctor();
+		return null;
 	}
 
 }

@@ -5,17 +5,22 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.doctorsoffice.dto.NewPatientRequestDTO;
 import com.doctorsoffice.model.Patient;
 import com.doctorsoffice.repository.PatientRepository;
 import com.doctorsoffice.service.PatientService;
+import com.doctorsoffice.service.RoleService;
 
 @Service
 public class PatientServiceImpl implements PatientService{
 	
 private final PatientRepository patientRepository;
+
+private final RoleService roleService;
 	
-	public PatientServiceImpl(PatientRepository patientRepository) {
+	public PatientServiceImpl(PatientRepository patientRepository,RoleService roleService) {
 		this.patientRepository = patientRepository;
+		this.roleService = roleService;
 	}
 
 	@Override
@@ -33,6 +38,12 @@ private final PatientRepository patientRepository;
 		Optional<Patient> patient= patientRepository.findById(id);
 		if(patient.isPresent()) return patient.get();
 		return null;
+	}
+
+	@Override
+	public Patient create(NewPatientRequestDTO dto) {
+		Patient patient = new Patient(dto.getFirstName(),dto.getLastName(),dto.getPhoneNumber(),dto.getPersonalID(),roleService.findByName("ROLE_PATIENT"));
+		return patientRepository.save(patient);
 	}
 
 }
