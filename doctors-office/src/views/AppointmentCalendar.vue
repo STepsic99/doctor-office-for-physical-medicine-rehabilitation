@@ -197,10 +197,10 @@ export default {
             for (let a of this.appointments) {
                 console.log(a)
                 a.display = 'auto'
-                a.textColor = "black"
-                a.backgroundColor = "#ffe3e3"
-                a.borderColor = "#ffe3e3"
-                a.description = "opis neki"
+                a.textColor = "white"
+                a.backgroundColor = "#0DE6FD"
+                a.borderColor = "#0DE6FD"
+                a.description = "opis"
                 a.editable = false
                 a.overlap = false
                 a.title="aa"
