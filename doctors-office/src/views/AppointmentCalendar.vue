@@ -175,17 +175,39 @@ export default {
         lastName:"",
         phoneNumber: "",
         personalID: ""
-      }
+      },
+      appointments:[]
     };
   },
   mounted: function () {
     this.calendarOptions.select = this.selectInCalendar;
     this.calendarOptions.eventClick = this.eventClickCalendar;
+     axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
     axios
       .get("http://localhost:8180/api/v1/services/doctor")
       .then((response) => {
         this.services = response.data;
       });
+      axios
+      .get("http://localhost:8180/api/v1/doctor-appointments")
+      .then((response) => {
+        this.appointments = response.data;
+            this.calendarOptions.events = [];
+            for (let a of this.appointments) {
+                console.log(a)
+                a.display = 'auto'
+                a.textColor = "black"
+                a.backgroundColor = "#ffe3e3"
+                a.borderColor = "#ffe3e3"
+                a.description = "opis neki"
+                a.editable = false
+                a.overlap = false
+                a.title="aa"
+                this.calendarOptions.events.push(a);
+            }
+      });
+      
   },
   methods: {
     showcreateNewAppointmentForm: function () {
@@ -260,6 +282,11 @@ export default {
     },
     overlap: function () {
       for (const event of this.calendarOptions.events) {
+        console.log(event.end)
+        console.log(new Date(event.end))
+        console.log(this.createNewAppointment.date[0])
+        console.log(this.createNewAppointment.date[1])
+        console.log(new Date(event.start))
         if (
           !(
             new Date(event.end) < this.createNewAppointment.date[0] ||
