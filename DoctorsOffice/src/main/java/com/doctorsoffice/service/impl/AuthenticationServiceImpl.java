@@ -31,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	}
 	
 	 private String getToken(User user) {
-	        return tokenUtils.generateToken(user.getUsername(), user.getRoles().get(0).getName());
+	        return tokenUtils.generateToken(user.getUsername(), user.getRoles().get(0).getName(), user.getId());
 	    }
 
 }

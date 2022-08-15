@@ -1,5 +1,7 @@
 package com.doctorsoffice.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.doctorsoffice.dto.NewAppointmentRequestDTO;
@@ -44,6 +46,12 @@ public class AppointmentServiceImpl implements AppointmentService{
 			return newAppointment;
 		}
 		return null;
+	}
+
+
+	@Override
+	public List<Appointment> findAllByPatientId(Long patientId) {
+		return appointmentRepository.findAllByPatientId(patientId);
 	}
 
 }

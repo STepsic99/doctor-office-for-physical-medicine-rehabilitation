@@ -3,11 +3,11 @@ package com.doctorsoffice.dto;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.doctorsoffice.model.AppointmentDoctor;
+import com.doctorsoffice.model.Appointment;
 import com.doctorsoffice.model.Service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AppointmentDoctorDTO {
+public class AppointmentDTO {
 	
 	private Long appID;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -17,7 +17,7 @@ public class AppointmentDoctorDTO {
 	private String services;
     
     
-	public AppointmentDoctorDTO(AppointmentDoctor app) {
+	public AppointmentDTO(Appointment app) {
 		this.appID = app.getId();
 		this.start = app.getStartTime();
 		this.end = app.getEndTime();

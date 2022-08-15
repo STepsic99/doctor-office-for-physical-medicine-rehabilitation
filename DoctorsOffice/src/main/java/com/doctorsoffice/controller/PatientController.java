@@ -7,16 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.doctorsoffice.dto.AppointmentDTO;
 import com.doctorsoffice.dto.NewPatientRequestDTO;
 import com.doctorsoffice.dto.NewPatientResponseDTO;
 import com.doctorsoffice.dto.PatientDTO;
+import com.doctorsoffice.model.Appointment;
+import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.model.Patient;
+import com.doctorsoffice.service.AppointmentService;
 import com.doctorsoffice.service.PatientService;
 
 @RestController
@@ -25,9 +30,12 @@ public class PatientController {
 	
 	private final PatientService patientService;
 	
+	private final AppointmentService appointmentService;
+	
 	@Autowired
-	public PatientController(PatientService patientService) {
+	public PatientController(PatientService patientService, AppointmentService appointmentService) {
 		this.patientService = patientService;
+		this.appointmentService = appointmentService;
 	}
 	
 	 @GetMapping(params = {"first-name", "last-name"})
@@ -58,4 +66,15 @@ public class PatientController {
 	    public ResponseEntity<NewPatientResponseDTO> create(@RequestBody NewPatientRequestDTO dto) {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewPatientResponseDTO(patientService.create(dto)));
 		}
+	 
+	 @GetMapping(value = "{patientId}/appointments")
+	 public ResponseEntity<List<AppointmentDTO>> findByPatientId(@PathVariable Long patientId) {	
+		 	List<Appointment> appointments = appointmentService.findAllByPatientId(patientId);
+		 	List<AppointmentDTO> retVal = new ArrayList<AppointmentDTO>();
+		 	for(Appointment app: appointments) {
+		 		retVal.add(new AppointmentDTO(app));
+		 	}
+	        return ResponseEntity.ok(retVal);
+	        
+	   }
 }
