@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import shared from '../shared'
 import AppointmentCalendar from '../views/AppointmentCalendar.vue'
 import PatientCalendar from '../views/PatientCalendar.vue'
+import PatientsProfiles from '../views/PatientsProfiles.vue'
 
 const routes = [
   {
@@ -32,6 +33,12 @@ const routes = [
     name: 'patientCalendar',
     component: PatientCalendar,
     meta: { requiresAuth: true, role: "ROLE_PATIENT" },
+  },
+  {
+    path: '/patient-profiles',
+    name: 'PatientsProfiles',
+    component: PatientsProfiles,
+    meta: { requiresAuth: true, role: "ROLE_NURSE" },
   }
 ]
 

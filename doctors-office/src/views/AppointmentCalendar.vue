@@ -315,7 +315,7 @@ export default {
       this.showSelectedReservation = false;
     },
     changeChosenPerson(value) {
-      this.chosenPatientId = value;
+      this.chosenPatientId = value.id;
     },
   },
 };
