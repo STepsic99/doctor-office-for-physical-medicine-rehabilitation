@@ -165,7 +165,20 @@ public abstract class User implements UserDetails{
 	public String getPersonalID() {
 		return personalID;
 	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPersonalID(String personalID) {
+		this.personalID = personalID;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
     
+	
     
 
 }

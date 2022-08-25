@@ -3,6 +3,7 @@ package com.doctorsoffice.service;
 import java.util.List;
 
 import com.doctorsoffice.dto.NewPatientRequestDTO;
+import com.doctorsoffice.dto.UpdatePatientDTO;
 import com.doctorsoffice.model.Patient;
 
 public interface PatientService {
@@ -11,4 +12,5 @@ public interface PatientService {
 	public List<Patient>findAllByPersonalID(String personalID);
 	public Patient findById(Long id);
 	public Patient create(NewPatientRequestDTO dto);
+	public Patient update (UpdatePatientDTO dto);
 }

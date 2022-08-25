@@ -1,14 +1,17 @@
 package com.doctorsoffice.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +21,8 @@ import com.doctorsoffice.dto.AppointmentDTO;
 import com.doctorsoffice.dto.NewPatientRequestDTO;
 import com.doctorsoffice.dto.NewPatientResponseDTO;
 import com.doctorsoffice.dto.PatientDTO;
+import com.doctorsoffice.dto.UpdatePatientDTO;
 import com.doctorsoffice.model.Appointment;
-import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.model.Patient;
 import com.doctorsoffice.service.AppointmentService;
 import com.doctorsoffice.service.PatientService;
@@ -75,6 +78,20 @@ public class PatientController {
 		 		retVal.add(new AppointmentDTO(app));
 		 	}
 	        return ResponseEntity.ok(retVal);
+	        
+	   }
+	 
+	 @PutMapping
+	 public ResponseEntity<HttpStatus> updatePatient(@RequestBody UpdatePatientDTO dto) {	
+		 	Patient patient = patientService.update(dto);
+		 	if(patient == null) return ResponseEntity.notFound().build();
+		 	return ResponseEntity.ok().build();        
+	   }
+	 
+	 @GetMapping(value = "{patientId}")
+	 public ResponseEntity<PatientDTO> getPatientInfo(@PathVariable Long patientId) {	
+		 	Patient patient = patientService.findById(patientId);
+	        return ResponseEntity.ok(new PatientDTO(patient));
 	        
 	   }
 }

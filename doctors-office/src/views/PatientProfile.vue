@@ -1,11 +1,9 @@
 <template>
   <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
-    <div v-if="!profileSelected">
-      <PatientList :existingPatient="true" @chosenPerson="changeChosenPerson" />
-    </div>
+    
 
-    <div v-else class="container">
+    <div class="container">
      
         <div class="row justify-content-between">
           <div class="col-6">
@@ -57,27 +55,56 @@
                   class="form-control"
                 />
                 <br /><br />
-
+            
         
+
+              </div>
+            </div>
+            <br />
+
+            <!-- Izmena passworda -->
+            <div class="card">
+              <div class="card-body">
+                <div v-if="isEditingPassword">
+                  <input
+                    v-model="passwordData.oldPassword"
+                    type="password"
+                    placeholder="Stara lozinka"
+                    class="form-control"
+                  /><br />
+                  <input
+                    v-model="passwordData.newPassword"
+                    type="password"
+                    placeholder="Nova lozinka"
+                    class="form-control"
+                  /><br />
+                  <input
+                    v-model="passwordData.newPasswordRepeated"
+                    type="password"
+                    placeholder="Ponovljena nova lozinka"
+                    class="form-control"
+                    v-bind:class="{ 'is-invalid': !newPassEqual() }"
+                  /><br />
+                </div>
 
                 <div class="d-flex justify-content-center">
                   <button
-                    v-if="!isEditingProfile"
-                    v-on:click="editProfile()"
+                    v-if="!isEditingPassword"
+                    v-on:click="editPassword()"
                     class="btn btn-primary m-1"
                   >
-                    Izmenite podatke
+                    Promena lozinke
                   </button>
                   <button
-                    v-if="isEditingProfile"
-                    v-on:click="cancelEditProfile()"
+                    v-if="isEditingPassword"
+                    v-on:click="cancelEditPassword()"
                     class="btn btn-danger m-1"
                   >
                     Odustani
                   </button>
                   <button
-                    v-if="isEditingProfile"
-                    v-on:click="saveEditProfile()"
+                    v-if="isEditingPassword"
+                    v-on:click="saveEditPassword()"
                     class="btn btn-primary m-1"
                   >
                     Sačuvaj
@@ -86,8 +113,8 @@
               </div>
             </div>
             <br />
-
-
+            <br />
+            <br />
        
 
             
@@ -103,56 +130,76 @@
 
 <script>
 import axios from "axios";
-import shared from "../shared";
 
-import Datepicker from "vue3-date-time-picker";
 import "vue3-date-time-picker/dist/main.css";
 
 // FULL CALNEDAR
 import "@fullcalendar/core/vdom"; // solves problem with Vite
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
-import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
+
 import PatientList from "@/components/PatientList.vue";
+import shared from '@/shared';
 
 export default {
-  name: "PatientsProfiles",
+  name: "PatientProfile",
   components: {
     PatientList,
   },
   data: function () {
     return {
       isEditingProfile: false,
-      profileSelected: false,
-      selectedPatientCopy: {}
+      selectedPatientCopy: {},
+      selectedPatient: {},
+      isEditingPassword: false,
+      passwordData:{
+            oldPassword: '',
+            newPassword: '',
+            newPasswordRepeated: ''
+        }
     };
   },
-  mounted: function () {},
-  methods: {
-    changeChosenPerson(value) {
-      this.selectedPatient = value;
-      this.profileSelected = true;
-    },
-     editProfile: function(){
-          this.selectedPatientCopy = JSON.parse(JSON.stringify(this.selectedPatient));
-          this.isEditingProfile = true;
-      },
-      cancelEditProfile: function(){
-          this.selectedPatient = this.selectedPatientCopy;
-          this.isEditingProfile = false;
-      },
-      saveEditProfile: function(){
-        this.isEditingProfile = false;
-        axios.defaults.headers.common.Authorization =
+  mounted: function () {
+    axios.defaults.headers.common.Authorization =
         "Bearer " + window.sessionStorage.getItem("jwt");
         axios
-        .put("http://localhost:8180/api/v1/patients", this.selectedPatient)
+        .get("http://localhost:8180/api/v1/patients/"+shared.getIdFromToken())
         .then((response) =>{
-              console.log("Success")
+              this.selectedPatient = response.data;
         })
         .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
+  },
+  methods: {
+    editPassword: function(){
+          this.isEditingPassword = true;
+      },
+      cancelEditPassword: function(){
+          this.passwordData.oldPassword = '';
+          this.passwordData.newPassword = '';
+          this.passwordData.newPasswordRepeated = '';
+          this.isEditingPassword = false;
+      },
+      saveEditPassword: function(){
+          if(!this.newPassEqual()) 
+          {
+            alert("Nove lozinke se ne podudaraju.")
+            return;
+          }
+          this.isEditingPassword = false;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + window.sessionStorage.getItem("jwt");  
+          axios.put('http://localhost:8180/api/client/updatePassword',this.passwordData)
+          .then(response => {
+                  if (response.data) {
+                        window.sessionStorage.clear();
+                        this.$router.push('/');
+                        alert('Uspesno promenjena lozinka');
+                  }
+                  else 
+                    alert('DOSLO JE DO GRESKE')
+          }).catch(err => {
+              alert('DOSLO JE DO GRESKE')
+          }); 
+      },
+      newPassEqual: function(){
+          return this.passwordData.newPassword === this.passwordData.newPasswordRepeated;
       }
   },
 };

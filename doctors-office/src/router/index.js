@@ -5,6 +5,7 @@ import shared from '../shared'
 import AppointmentCalendar from '../views/AppointmentCalendar.vue'
 import PatientCalendar from '../views/PatientCalendar.vue'
 import PatientsProfiles from '../views/PatientsProfiles.vue'
+import PatientProfile from '../views/PatientProfile.vue'
 
 const routes = [
   {
@@ -39,7 +40,13 @@ const routes = [
     name: 'PatientsProfiles',
     component: PatientsProfiles,
     meta: { requiresAuth: true, role: "ROLE_NURSE" },
-  }
+  },
+  {
+    path: '/patient/profile',
+    name: 'patientProfile',
+    component: PatientProfile,
+    meta: { requiresAuth: true, role: "ROLE_PATIENT" },
+  },
 ]
 
 const router = createRouter({
