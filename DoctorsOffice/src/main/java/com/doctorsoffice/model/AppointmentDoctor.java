@@ -20,6 +20,12 @@ public class AppointmentDoctor extends Appointment{
 			LocalDateTime startTime, LocalDateTime endTime) {
 		super(patient, services, medicalWorker, startTime, endTime);
 	}
+
+	public Report getReport() {
+		return report;
+	}
+	
+	
 	
 	
 }

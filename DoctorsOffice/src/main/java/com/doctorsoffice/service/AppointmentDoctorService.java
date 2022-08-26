@@ -7,5 +7,6 @@ import com.doctorsoffice.model.AppointmentDoctor;
 public interface AppointmentDoctorService {
 	
 	List<AppointmentDoctor> findAll();
+	AppointmentDoctor findById(Long id);
 	
 }

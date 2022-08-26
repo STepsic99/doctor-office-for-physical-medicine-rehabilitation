@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentDTO;
+import com.doctorsoffice.dto.DoctorAppointmentDTO;
 import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.service.AppointmentDoctorService;
 
@@ -32,6 +34,13 @@ private final AppointmentDoctorService appointmentDoctorService;
 		 		retVal.add(new AppointmentDTO(app));
 		 	}
 	        return ResponseEntity.ok(retVal);
+	        
+	   }
+	
+	@GetMapping(value = "{appointmentId}")
+	 public ResponseEntity<DoctorAppointmentDTO> findAll(@PathVariable Long appointmentId) {	
+		 	AppointmentDoctor appointment = appointmentDoctorService.findById(appointmentId);		 	
+	        return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        
 	   }
 

@@ -12,16 +12,44 @@
         <table width="100%">
             <tr>
                 <th width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer" v-on:click="goBack()"></i></th>
-                <th width="50%"><h1>{{selectedAppointment.extendedProps.services}}</h1></th>
-                <th width="25%">{{transformDate(selectedAppointment.start)}} - {{transformDate(selectedAppointment.end)}}</th>
+                <th width="50%"><h1>{{selectedEvent.extendedProps.services}}</h1></th>
+                <th width="25%">{{transformDate(selectedEvent.start)}} - {{transformDate(selectedEvent.end)}}</th>
             </tr>
             </table>
+      <div style="text-align:left;margin-top:5%;margin-bottom:5%">
+        Ime i prezime: <b>{{selectedAppointment.patientFirstName}} {{selectedAppointment.patientLastName}}</b><br>
+        JMBG: {{selectedAppointment.patientPersonalID}}
+      </div>
+      <h3> IZVEŠTAJ LEAKRA SPECIJALISTE FIZIKALNE MEDICINE </h3>
+      <table width="100%" style="margin-top:5%;border-collapse:separate; border-spacing:5em;">
+        <tr>
+          <td style="text-align:left;vertical-align: top;" width="10%">Anamneza: </td>
+          <td width="90%"><textarea class="form-control" rows="6"></textarea></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;vertical-align: top;" width="10%">Status: </td>
+          <td width="90%"><textarea class="form-control" rows="6"></textarea></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;vertical-align: top;" width="10%">Nalazi: </td>
+          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;vertical-align: top;" width="10%">Plan lečenja: </td>
+          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;vertical-align: top;" width="10%">Kontrola: </td>
+          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+        </tr>
+        </table>
      <!-- <div class="col">
-       <h1 style="display: inline">{{selectedAppointment.extendedProps.services}}</h1>
+       <h1 style="display: inline">{{selectedEvent.extendedProps.services}}</h1>
       </div>
       <div class="col">
-       <h6 style="display: inline">{{transformDate(selectedAppointment.start)}} - {{transformDate(selectedAppointment.end)}}</h6>
+       <h6 style="display: inline">{{transformDate(selectedEvent.start)}} - {{transformDate(selectedEvent.end)}}</h6>
       </div> -->
+      <button type="button" class="btn btn-primary">Završi pregled</button>
       </div>
     </div>
 
@@ -56,6 +84,7 @@ export default {
     return {
       terms: [],
 
+      selectedEvent: {},
       selectedAppointment: {},
       showSelectedAppointment: false,
 
@@ -158,12 +187,19 @@ export default {
       this.loadDataSelectedReservation(e);
     },
     loadDataSelectedReservation: function (event) {
-      this.selectedAppointment = event;
-      this.showSelectedAppointment = true;
-      console.log(event)
+      this.selectedEvent = event;
+      axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
+      axios
+      .get("http://localhost:8180/api/v1/doctor-appointments/"+event.extendedProps.appID)
+      .then((response) => {
+        this.selectedAppointment = response.data;
+        console.log(this.selectedAppointment)
+         this.showSelectedAppointment = true;
+      });   
     },
     closeSelectedReservation: function () {
-      this.selectedAppointment = null;
+      this.selectedEvent = null;
       this.showSelectedAppointment = false;
     },
     changeChosenPerson(value) {
