@@ -125,8 +125,8 @@ import axios from "axios";
 import Datepicker from "vue3-date-time-picker";
 import "vue3-date-time-picker/dist/main.css";
 
-// FULL CALNEDAR
-import "@fullcalendar/core/vdom"; // solves problem with Vite
+
+import "@fullcalendar/core/vdom"; 
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";

@@ -47,3 +47,19 @@ VALUES (1,'PREGLED', 3000, 'DOCTOR');
 INSERT INTO service(ID, NAME, PRICE, STAFF_TYPE)
 VALUES (2,'KONTROLNI PREGLED', 2000, 'DOCTOR');
 
+
+--PERMISSIONS
+INSERT INTO permission(id, name)
+VALUES (1, 'CHANGE_PASSWORD_PERMISSION');
+
+
+--ROLES_PERMISSIONS
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 1);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 1);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 1);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 1);
+

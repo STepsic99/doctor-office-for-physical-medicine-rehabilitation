@@ -62,7 +62,7 @@
             </div>
             <br />
 
-            <!-- Izmena passworda -->
+            
             <div class="card">
               <div class="card-body">
                 <div v-if="isEditingPassword">
@@ -79,7 +79,7 @@
                     class="form-control"
                   /><br />
                   <input
-                    v-model="passwordData.newPasswordRepeated"
+                    v-model="newPasswordRepeated"
                     type="password"
                     placeholder="Ponovljena nova lozinka"
                     class="form-control"
@@ -133,8 +133,8 @@ import axios from "axios";
 
 import "vue3-date-time-picker/dist/main.css";
 
-// FULL CALNEDAR
-import "@fullcalendar/core/vdom"; // solves problem with Vite
+
+import "@fullcalendar/core/vdom"; 
 
 import PatientList from "@/components/PatientList.vue";
 import shared from '@/shared';
@@ -152,9 +152,9 @@ export default {
       isEditingPassword: false,
       passwordData:{
             oldPassword: '',
-            newPassword: '',
-            newPasswordRepeated: ''
-        }
+            newPassword: ''
+        },
+      newPasswordRepeated: ''
     };
   },
   mounted: function () {
@@ -174,7 +174,7 @@ export default {
       cancelEditPassword: function(){
           this.passwordData.oldPassword = '';
           this.passwordData.newPassword = '';
-          this.passwordData.newPasswordRepeated = '';
+          this.newPasswordRepeated = '';
           this.isEditingPassword = false;
       },
       saveEditPassword: function(){
@@ -185,21 +185,19 @@ export default {
           }
           this.isEditingPassword = false;
           axios.defaults.headers.common["Authorization"] = "Bearer " + window.sessionStorage.getItem("jwt");  
-          axios.put('http://localhost:8180/api/client/updatePassword',this.passwordData)
+          axios.put('http://localhost:8180/api/v1/users/updatePassword',this.passwordData)
           .then(response => {
                   if (response.data) {
                         window.sessionStorage.clear();
                         this.$router.push('/');
-                        alert('Uspesno promenjena lozinka');
+                        alert('Uspesno promenjena lozinka.');
                   }
                   else 
-                    alert('DOSLO JE DO GRESKE')
-          }).catch(err => {
-              alert('DOSLO JE DO GRESKE')
-          }); 
+                    alert('Neuspela promena lozinke.')
+          }).catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
       },
       newPassEqual: function(){
-          return this.passwordData.newPassword === this.passwordData.newPasswordRepeated;
+          return this.passwordData.newPassword === this.newPasswordRepeated;
       }
   },
 };

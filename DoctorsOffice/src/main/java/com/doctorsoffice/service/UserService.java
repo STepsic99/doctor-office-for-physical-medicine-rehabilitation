@@ -1,5 +1,7 @@
 package com.doctorsoffice.service;
 
-public interface UserService {
+import com.doctorsoffice.dto.PasswordDTO;
 
+public interface UserService {
+	Boolean updatePassword(PasswordDTO dto, Long userId);
 }
