@@ -58,7 +58,7 @@
     </tr>
   </table>
   <div v-if="showList">
-    <table style="border-collapse:separate; border-spacing:1em 1em">
+    <table width="100%" style="border-collapse:separate; border-spacing:1em 1em">
       <tbody>
         <tr v-for="p in searchedDiseases" :key="p.id">
           <td>{{ p.code }} - {{ p.name }}</td>
@@ -93,7 +93,7 @@ export default {
       searchedCodeName: "",
       foundDiseases: [],
       searchedDiseases: [],
-      chosenPersonID: "",
+      chosenDiseaseID: "",
       personChosen: this.closeSearch,
     };
   },
@@ -130,10 +130,10 @@ export default {
           });
       }
     },
-    choosePerson: function (pickedPerson) {
-      this.chosenPersonID = pickedPerson.id;
+    choosePerson: function (pickedDisease) {
+      this.chosenDiseaseID = pickedDisease.id;
       for (var i = 0; i < this.searchedDiseases.length; i++) {
-        if (this.searchedDiseases[i].id == this.chosenPersonID) {
+        if (this.searchedDiseases[i].id == this.chosenDiseaseID) {
           this.foundDiseases.push(this.searchedDiseases[i]);
           this.searchedDiseases = [];
           break;
@@ -141,20 +141,21 @@ export default {
       }
       this.personChosen = true;
       this.searchedCodeName = "";
-      this.$emit("chosenDisease", pickedPerson);
+      this.$emit("chosenDisease", this.foundDiseases);
     },
-    rechoosePerson: function (pickedPerson) {
+    rechoosePerson: function (pickedDisease) {
       for (var i = 0; i < this.foundDiseases.length; i++) {
-        if (this.foundDiseases[i].id == pickedPerson.id) {
+        if (this.foundDiseases[i].id == pickedDisease.id) {
           this.foundDiseases.splice(i, 1);
           break;
         }
       }
       this.searchedCodeName = "";
+      this.$emit("chosenDisease", this.foundDiseases);
     },
     abort: function(){
         this.personChosen = true;
-        this.$emit("chosenDisease", {});
+        this.$emit("chosenDisease", this.foundDiseases);
     }
   },
 };

@@ -52,13 +52,44 @@
         <tr>
           <td colspan="2" style="text-align:left;"><DiseaseList v-bind:closeSearch="searchClosed" @chosenDisease="changeChosenDiseases"/></td>
         </tr>
+        <tr>
+          <td style="text-align:left;" width="10%">Usluge: </td>
+          <td width="90%" style="text-align:left;"><i style="zoom:2;cursor:pointer;color:green;" class="fa fa-plus" aria-hidden="true" v-on:click="addService()"></i></td>
+        </tr>
         </table>
-     <!-- <div class="col">
-       <h1 style="display: inline">{{selectedEvent.extendedProps.services}}</h1>
-      </div>
-      <div class="col">
-       <h6 style="display: inline">{{transformDate(selectedEvent.start)}} - {{transformDate(selectedEvent.end)}}</h6>
-      </div> -->
+        <div v-if="assignedServices.length!=0" style="text-align:center;background-color:#e9ecef;margin-left:5em;margin-right:5em"><h5 style="margin-bottom:0"><b>NALOG ZA PRUŽANJE TERAPIJE</b></h5></div>
+        <div v-if="assignedServices.length!=0" style="margin-right:5em;margin-left:5em;margin-top:1em;margin-bottom:5%;">
+        <table class="service-table" width="100%">
+          <tr style="background-color:#e9ecef;">
+            <th>Naziv usluge</th>
+            <th>Napomena</th>
+            <th></th>
+            </tr>
+            <tr v-for="a in assignedServices" :key="a.id">
+              <td>
+                <input class="form-control" list="datalistOptions" style="border:none;border-radius:0" placeholder="Počnite da kucate za pretragu...">
+              <datalist id="datalistOptions">
+                <option value="San Francisco"/>
+                <option value="New York"/>
+                <option value="Seattle"/>
+                <option value="Los Angeles"/>
+                <option value="Chicago"/>
+              </datalist>
+              </td>
+              <td>
+                <input type="text" style="border:none;border-radius:0" class="form-control">
+              </td>
+              <td>
+                <i
+            class="fa fa-times"
+            aria-hidden="true"
+            style="color: red; zoom: 2; cursor: pointer"
+            v-on:click="subService(a)"
+          ></i>
+              </td>
+              </tr>
+        </table>
+        </div>
       <button type="button" class="btn btn-primary">Završi pregled</button>
       </div>
     </div>
@@ -121,14 +152,15 @@ export default {
       oldPatient: true,
       services: [],
       chosenPatientId: "",
-      newPatient:{
-        firstName: "",
-        lastName:"",
-        phoneNumber: "",
-        personalID: ""
-      },
       appointments:[],
-      searchClosed:true
+      searchClosed:true,
+      chosenDiseases:[],
+      assignedServices:[],
+      assignedService:{
+        service:{},
+        note:''
+      },
+      cnt: 0
     };
   },
   mounted: function () {
@@ -216,7 +248,7 @@ export default {
       this.showSelectedAppointment = false;
     },
     changeChosenDiseases(value) {
-      this.chosenPatientId = value.id;
+      this.chosenDiseases = value;
       this.searchClosed = true;
     },
     transformDate(rawDate){
@@ -227,6 +259,18 @@ export default {
     },
     openSearch(){
       this.searchClosed = false;
+    },
+    addService(){
+      this.cnt++;
+      this.assignedServices.push({id:this.cnt, service:{}, note:''})
+    },
+    subService(a){
+      for (var i = 0; i < this.assignedServices.length; i++) {
+        if (this.assignedServices[i].id == a.id) {
+          this.assignedServices.splice(i, 1);
+          break;
+        }
+      }
     }
   },
 };
@@ -234,4 +278,10 @@ export default {
 
 
 <style scoped>
+
+.service-table, table.service-table  th, table.service-table td{
+   border: 1px solid black;
+  border-collapse: collapse;
+}
+
 </style>
