@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     searchPeople: function(){
-      if(this.searchOption===1){
+      if(this.searchOption==1){
       axios.defaults.headers.common.Authorization =
         'Bearer ' + window.sessionStorage.getItem('jwt')
       axios

@@ -9,38 +9,48 @@
       </div>
 
     <div v-else>
-        <table width="100%">
+        <table width="100%" style="margin-left:5em;margin-right:5em">
             <tr>
-                <th width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer" v-on:click="goBack()"></i></th>
+                <th style="text-align:left" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer" v-on:click="goBack()"></i></th>
                 <th width="50%"><h1>{{selectedEvent.extendedProps.services}}</h1></th>
-                <th width="25%">{{transformDate(selectedEvent.start)}} - {{transformDate(selectedEvent.end)}}</th>
+                <th width="25%" style="text-align:right"></th>
             </tr>
             </table>
-      <div style="text-align:left;margin-top:5%;margin-bottom:5%">
-        Ime i prezime: <b>{{selectedAppointment.patientFirstName}} {{selectedAppointment.patientLastName}}</b><br>
+      <div style="text-align:left;margin-top:5%;margin-bottom:5%;margin-left:5em;margin-right:5em">
+        Ime i prezime: <b>{{selectedAppointment.patientFirstName}} {{selectedAppointment.patientLastName}}</b>  <span style="float:right">
+       Datum pregleda: {{transformDate(selectedEvent.start)}}
+      </span>
+      <br>
         JMBG: {{selectedAppointment.patientPersonalID}}
       </div>
-      <h3> IZVEŠTAJ LEAKRA SPECIJALISTE FIZIKALNE MEDICINE </h3>
-      <table width="100%" style="margin-top:5%;border-collapse:separate; border-spacing:5em;">
+      <h3 style="margin-left:5em;"> IZVEŠTAJ LEAKRA SPECIJALISTE FIZIKALNE MEDICINE </h3>
+      <table width="100%" style="margin-top:5%;border-collapse:separate; border-spacing:5em 0;margin-bottom:5%">
         <tr>
-          <td style="text-align:left;vertical-align: top;" width="10%">Anamneza: </td>
-          <td width="90%"><textarea class="form-control" rows="6"></textarea></td>
+          <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Anamneza: </td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6"></textarea></td>
         </tr>
         <tr>
-          <td style="text-align:left;vertical-align: top;" width="10%">Status: </td>
-          <td width="90%"><textarea class="form-control" rows="6"></textarea></td>
+          <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Status: </td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6"></textarea></td>
         </tr>
         <tr>
-          <td style="text-align:left;vertical-align: top;" width="10%">Nalazi: </td>
-          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Nalazi: </td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
         </tr>
         <tr>
-          <td style="text-align:left;vertical-align: top;" width="10%">Plan lečenja: </td>
-          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Plan lečenja: </td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
         </tr>
         <tr>
-          <td style="text-align:left;vertical-align: top;" width="10%">Kontrola: </td>
-          <td width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Kontrola: </td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;" width="10%">Dijagnoze: </td>
+          <td width="90%" style="text-align:left;"><i style="zoom:2;cursor:pointer;color:green;" class="fa fa-plus" aria-hidden="true" v-on:click="openSearch()"></i></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:left;"><DiseaseList v-bind:closeSearch="searchClosed" @chosenDisease="changeChosenDiseases"/></td>
         </tr>
         </table>
      <!-- <div class="col">
@@ -72,6 +82,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
+import DiseaseList from "@/components/DiseaseList.vue"
 
 export default {
   name: "DoctorCalendar",
@@ -79,6 +90,7 @@ export default {
     FullCalendar,
     Datepicker,
     PatientList,
+    DiseaseList
   },
   data: function () {
     return {
@@ -115,7 +127,8 @@ export default {
         phoneNumber: "",
         personalID: ""
       },
-      appointments:[]
+      appointments:[],
+      searchClosed:true
     };
   },
   mounted: function () {
@@ -202,14 +215,18 @@ export default {
       this.selectedEvent = null;
       this.showSelectedAppointment = false;
     },
-    changeChosenPerson(value) {
+    changeChosenDiseases(value) {
       this.chosenPatientId = value.id;
+      this.searchClosed = true;
     },
     transformDate(rawDate){
         return rawDate.getDate()+"."+rawDate.getMonth()+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
     },
     goBack(){
         this.showSelectedAppointment = false;
+    },
+    openSearch(){
+      this.searchClosed = false;
     }
   },
 };
