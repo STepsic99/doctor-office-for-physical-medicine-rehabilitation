@@ -3,13 +3,14 @@ package com.doctorsoffice.model;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
 public class AppointmentDoctor extends Appointment{
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Report report;
 
 	public AppointmentDoctor() {
@@ -23,6 +24,10 @@ public class AppointmentDoctor extends Appointment{
 
 	public Report getReport() {
 		return report;
+	}
+
+	public void setReport(Report report) {
+		this.report = report;
 	}
 	
 	

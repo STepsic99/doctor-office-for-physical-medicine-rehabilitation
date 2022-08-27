@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentDTO;
 import com.doctorsoffice.dto.DoctorAppointmentDTO;
+import com.doctorsoffice.dto.NewPatientRequestDTO;
+import com.doctorsoffice.dto.NewPatientResponseDTO;
+import com.doctorsoffice.dto.NewReportRequestDTO;
+import com.doctorsoffice.dto.NewReportResponseDTO;
 import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.service.AppointmentDoctorService;
 
@@ -43,5 +50,10 @@ private final AppointmentDoctorService appointmentDoctorService;
 	        return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        
 	   }
+	
+	 	@PostMapping(value = "{appointmentId}/report")
+	    public ResponseEntity<NewReportResponseDTO> create(@RequestBody NewReportRequestDTO dto,@PathVariable Long appointmentId) {
+	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewReportResponseDTO(appointmentDoctorService.addReport(dto,appointmentId)));
+		}
 
 }

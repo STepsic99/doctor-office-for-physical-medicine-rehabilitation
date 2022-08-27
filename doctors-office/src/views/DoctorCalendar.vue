@@ -27,23 +27,23 @@
       <table width="100%" style="margin-top:5%;border-collapse:separate; border-spacing:5em 0;margin-bottom:5%">
         <tr>
           <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Anamneza: </td>
-          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6"></textarea></td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6" v-model="this.report.anamnesis"></textarea></td>
         </tr>
         <tr>
           <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Status: </td>
-          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6"></textarea></td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="6" v-model="this.report.status"></textarea></td>
         </tr>
         <tr>
           <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Nalazi: </td>
-          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4" v-model="this.report.medicalFindings"></textarea></td>
         </tr>
         <tr>
           <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Plan lečenja: </td>
-          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4" v-model="this.report.treatmentPlan"></textarea></td>
         </tr>
         <tr>
           <td style="text-align:left;vertical-align: top;padding-bottom:5em" width="10%">Kontrola: </td>
-          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4"></textarea></td>
+          <td style="padding-bottom:5em" width="90%"><textarea class="form-control" rows="4" v-model="this.report.followUpExamination"></textarea></td>
         </tr>
         <tr>
           <td style="text-align:left;" width="10%">Dijagnoze: </td>
@@ -67,17 +67,13 @@
             </tr>
             <tr v-for="a in assignedServices" :key="a.id">
               <td>
-                <input class="form-control" list="datalistOptions" style="border:none;border-radius:0" placeholder="Počnite da kucate za pretragu...">
+                <input v-model="a.serviceName" class="form-control" list="datalistOptions" style="border:none;border-radius:0" placeholder="Počnite da kucate za pretragu...">
               <datalist id="datalistOptions">
-                <option value="San Francisco"/>
-                <option value="New York"/>
-                <option value="Seattle"/>
-                <option value="Los Angeles"/>
-                <option value="Chicago"/>
+                <option v-for="ser in services" :key="ser.id" :value="ser.name"/>
               </datalist>
               </td>
               <td>
-                <input type="text" style="border:none;border-radius:0" class="form-control">
+                <input type="text" style="border:none;border-radius:0" class="form-control" v-model="a.note">
               </td>
               <td>
                 <i
@@ -90,7 +86,7 @@
               </tr>
         </table>
         </div>
-      <button type="button" class="btn btn-primary">Završi pregled</button>
+      <button type="button" class="btn btn-primary" v-on:click="finishAppointment()">Završi pregled</button>
       </div>
     </div>
 
@@ -160,7 +156,16 @@ export default {
         service:{},
         note:''
       },
-      cnt: 0
+      cnt: 0,
+      report:{
+        anamnesis: '',
+        status: '',
+        medicalFindings: '',
+        treatmentPlan: '',
+        followUpExamination: '',
+        diagnoses: [],
+        therapies: []
+      }
     };
   },
   mounted: function () {
@@ -261,8 +266,15 @@ export default {
       this.searchClosed = false;
     },
     addService(){
+      if(this.cnt==0){
+        axios
+        .get("http://localhost:8180/api/v1/services/physiotherapist")
+        .then((response) => {
+        this.services = response.data;
+      });
+      }
       this.cnt++;
-      this.assignedServices.push({id:this.cnt, service:{}, note:''})
+      this.assignedServices.push({id:this.cnt, serviceName:'',service:{} , note:''})
     },
     subService(a){
       for (var i = 0; i < this.assignedServices.length; i++) {
@@ -271,6 +283,26 @@ export default {
           break;
         }
       }
+    },
+    finishAppointment(){
+      this.report.diagnoses = this.chosenDiseases;
+      for(let i = 0; i<this.assignedServices.length; i++){
+          for(let j = 0; j<this.services.length; j++){
+            if(this.assignedServices[i].serviceName == this.services[j].name){
+              this.assignedServices[i].service = this.services[j]
+              break;
+            }
+          }
+      }
+      this.report.therapies = this.assignedServices;
+      axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
+        axios
+        .post("http://localhost:8180/api/v1/doctor-appointments/"+this.selectedAppointment.appID+"/report", this.report)
+        .then((response) =>{
+              console.log(response.data)
+        })
+        .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
     }
   },
 };
