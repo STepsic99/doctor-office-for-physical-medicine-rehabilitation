@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 60px"></div>
+<div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
     <div class="row">
       <div class="col">
@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="row d-flex justify-content-center">
+    <div class="row d-flex justify-content-center" >
       <button
         v-if="!createNewAppointment.formVisible && !showSelectedReservation"
         class="btn btn-primary mx-2 col-4"
@@ -166,6 +166,22 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         events: [],
+        hiddenDays: [ 0],
+        businessHours: [
+            {
+              daysOfWeek: [ 6 ],
+              startTime: '08:00', 
+              endTime: '13:00',
+            },
+            {
+              daysOfWeek: [ 1,2,3,4,5 ],
+              startTime: '08:00', 
+              endTime: '16:00',
+            } 
+        ],
+        slotMinTime: "08:00:00",
+        slotMaxTime: "16:00:00",
+        contentHeight: 'auto'
       },
       oldPatient: true,
       services: [],

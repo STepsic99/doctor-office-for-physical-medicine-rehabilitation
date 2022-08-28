@@ -88,6 +88,10 @@
         </div>
       <button type="button" class="btn btn-primary" v-on:click="finishAppointment()">Završi pregled</button>
       </div>
+
+      <div v-if="showAppointmentReport">
+        aa
+      </div>
     </div>
 
 
@@ -144,6 +148,22 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         events: [],
+        hiddenDays: [ 0],
+        businessHours: [
+            {
+              daysOfWeek: [ 6 ],
+              startTime: '08:00', 
+              endTime: '13:00',
+            },
+            {
+              daysOfWeek: [ 1,2,3,4,5 ],
+              startTime: '08:00', 
+              endTime: '16:00',
+            } 
+        ],
+        slotMinTime: "08:00:00",
+        slotMaxTime: "16:00:00",
+        contentHeight: 'auto'
       },
       oldPatient: true,
       services: [],
@@ -165,7 +185,8 @@ export default {
         followUpExamination: '',
         diagnoses: [],
         therapies: []
-      }
+      },
+      showAppointmentReport:false
     };
   },
   mounted: function () {
@@ -245,7 +266,13 @@ export default {
       .then((response) => {
         this.selectedAppointment = response.data;
         console.log(this.selectedAppointment)
-         this.showSelectedAppointment = true;
+        if(!this.selectedAppointment.report){
+          this.showSelectedAppointment = true;
+          this.showAppointmentReport = false;
+        }
+         else{
+          this.showAppointmentReport = true;
+         }
       });   
     },
     closeSelectedReservation: function () {

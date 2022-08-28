@@ -61,6 +61,22 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         events: [],
+        hiddenDays: [ 0],
+        businessHours: [
+            {
+              daysOfWeek: [ 6 ],
+              startTime: '08:00', 
+              endTime: '13:00',
+            },
+            {
+              daysOfWeek: [ 1,2,3,4,5 ],
+              startTime: '08:00', 
+              endTime: '16:00',
+            } 
+        ],
+        slotMinTime: "08:00:00",
+        slotMaxTime: "16:00:00",
+        contentHeight: 'auto'
       },
       oldPatient: true,
       services: [],

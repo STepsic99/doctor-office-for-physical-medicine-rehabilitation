@@ -14,11 +14,11 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="/" class="nav-item nav-link active">Naslovna</a>
-                <a href="calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar termina</a>
-                <a href="doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</a>
-                <a href="patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
-                <a href="patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
-                <a href="patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>
+                <a href="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar termina</a>
+                <a href="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</a>
+                <a href="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
+                <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
+                <a href="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>
                 <a href="about.html" v-if="!this.role" class="nav-item nav-link">Usluge</a>
                 <a href="service.html" v-if="!this.role" class="nav-item nav-link">O nama</a>
                 <div v-if="!this.role" class="nav-item dropdown">
@@ -70,8 +70,8 @@
             <td style="width:20%;height:1px">
               <div style="text-align:left;height:100%">
                     <h3  class="text-white mb-4">Radno vreme</h3>
-                    <p class="mb-2">Radnim danima: 08:00-20:00</p>
-                    <p class="mb-2">Subota: 08:00-20:00</p>
+                    <p class="mb-2">Radnim danima: 08:00-16:00</p>
+                    <p class="mb-2">Subota: 08:00-13:00</p>
                     <p class="mb-0">Nedelja: zatvoreno</p>
                 </div>
             </td>
