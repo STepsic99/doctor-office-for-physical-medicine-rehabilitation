@@ -1,15 +1,15 @@
 <template>
-<div style="margin-top: 60px"></div>
+  <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
-    <div class="row">
+    <div v-if="!showAppointmentReport" class="row">
       <div class="col">
         <h1>Calendar</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>
-    </div>
+    
 
-    <div class="row d-flex justify-content-center" >
+    <div class="row d-flex justify-content-center">
       <button
         v-if="!createNewAppointment.formVisible && !showSelectedReservation"
         class="btn btn-primary mx-2 col-4"
@@ -78,23 +78,46 @@
                   @chosenPerson="changeChosenPerson"
                 />
                 <div v-if="!oldPatient">
-  <form class="row d-flex justify-content-between">
-  <div class="col-6">
-   <input type="text" class="form-control" v-model="newPatient.firstName" placeholder="Ime">
-  </div>
-  <div class="col-6">
-    <input type="text" class="form-control" v-model="newPatient.lastName" placeholder="Prezime">
-  </div>
-</form>
-<form style="margin-top: 1.8em;" class="row d-flex justify-content-between">
-  <div class="col-6">
-   <input type="text" class="form-control" v-model="newPatient.phoneNumber" placeholder="Broj telefona">
-  </div>
-  <div class="col-6">
-    <input type="text" class="form-control" v-model="newPatient.personalID" placeholder="JMBG (opciono)">
-  </div>
-</form>
-</div>
+                  <form class="row d-flex justify-content-between">
+                    <div class="col-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="newPatient.firstName"
+                        placeholder="Ime"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="newPatient.lastName"
+                        placeholder="Prezime"
+                      />
+                    </div>
+                  </form>
+                  <form
+                    style="margin-top: 1.8em"
+                    class="row d-flex justify-content-between"
+                  >
+                    <div class="col-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="newPatient.phoneNumber"
+                        placeholder="Broj telefona"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="newPatient.personalID"
+                        placeholder="JMBG (opciono)"
+                      />
+                    </div>
+                  </form>
+                </div>
               </div>
             </span>
             <br />
@@ -116,6 +139,11 @@
         </div>
       </div>
     </div>
+    </div>
+    <div v-else>
+        <div style="text-align:left;margin-bottom:1em;" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></div>
+        <Report />
+      </div>
   </div>
 </template>
 
@@ -125,14 +153,14 @@ import axios from "axios";
 import Datepicker from "vue3-date-time-picker";
 import "vue3-date-time-picker/dist/main.css";
 
-
-import "@fullcalendar/core/vdom"; 
+import "@fullcalendar/core/vdom";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
+import Report from "@/components/Report.vue";
 
 export default {
   name: "AppointmentCalendar",
@@ -140,6 +168,7 @@ export default {
     FullCalendar,
     Datepicker,
     PatientList,
+    Report
   },
   data: function () {
     return {
@@ -166,64 +195,66 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         events: [],
-        hiddenDays: [ 0],
+        hiddenDays: [0],
         businessHours: [
-            {
-              daysOfWeek: [ 6 ],
-              startTime: '08:00', 
-              endTime: '13:00',
-            },
-            {
-              daysOfWeek: [ 1,2,3,4,5 ],
-              startTime: '08:00', 
-              endTime: '16:00',
-            } 
+          {
+            daysOfWeek: [6],
+            startTime: "08:00",
+            endTime: "13:00",
+          },
+          {
+            daysOfWeek: [1, 2, 3, 4, 5],
+            startTime: "08:00",
+            endTime: "16:00",
+          },
         ],
         slotMinTime: "08:00:00",
         slotMaxTime: "16:00:00",
-        contentHeight: 'auto'
+        contentHeight: "auto",
       },
       oldPatient: true,
       services: [],
       chosenPatientId: "",
-      newPatient:{
+      newPatient: {
         firstName: "",
-        lastName:"",
+        lastName: "",
         phoneNumber: "",
-        personalID: ""
+        personalID: "",
       },
-      appointments:[]
+      appointments: [],
+      showAppointmentReport: false,
+      selectedEvent: {},
+      selectedAppointment: {}
     };
   },
   mounted: function () {
     this.calendarOptions.select = this.selectInCalendar;
     this.calendarOptions.eventClick = this.eventClickCalendar;
-     axios.defaults.headers.common.Authorization =
-        "Bearer " + window.sessionStorage.getItem("jwt");
+    axios.defaults.headers.common.Authorization =
+      "Bearer " + window.sessionStorage.getItem("jwt");
     axios
       .get("http://localhost:8180/api/v1/services/doctor")
       .then((response) => {
         this.services = response.data;
       });
-      axios
+    axios
       .get("http://localhost:8180/api/v1/doctor-appointments")
       .then((response) => {
         this.appointments = response.data;
-            this.calendarOptions.events = [];
-            for (let a of this.appointments) {
-                console.log(a)
-                a.display = 'auto'
-                a.textColor = "white"
-                a.backgroundColor = "#0DE6FD"
-                a.borderColor = "#0DE6FD"
-                a.description = "opis"
-                a.editable = false
-                a.overlap = false
-                a.title=a.services
-                this.calendarOptions.events.push(a);
-            }
+        this.calendarOptions.events = [];
+        for (let a of this.appointments) {
+          console.log(a);
+          a.display = "auto";
+          a.textColor = "white";
+          a.backgroundColor = "#0DE6FD";
+          a.borderColor = "#0DE6FD";
+          a.description = "opis";
+          a.editable = false;
+          a.overlap = false;
+          a.title = a.services;
+          this.calendarOptions.events.push(a);
+        }
       });
-      
   },
   methods: {
     showcreateNewAppointmentForm: function () {
@@ -249,12 +280,12 @@ export default {
     addNewAppointment: async function () {
       if (!this.oldPatient) {
         axios.defaults.headers.common.Authorization =
-        "Bearer " + window.sessionStorage.getItem("jwt");
+          "Bearer " + window.sessionStorage.getItem("jwt");
         const response = await axios.post(
           "http://localhost:8180/api/v1/patients",
           this.newPatient
         );
-        
+
         if (!response.data) {
           return;
         }
@@ -299,11 +330,11 @@ export default {
     },
     overlap: function () {
       for (const event of this.calendarOptions.events) {
-        console.log(event.end)
-        console.log(new Date(event.end))
-        console.log(this.createNewAppointment.date[0])
-        console.log(this.createNewAppointment.date[1])
-        console.log(new Date(event.start))
+        console.log(event.end);
+        console.log(new Date(event.end));
+        console.log(this.createNewAppointment.date[0]);
+        console.log(this.createNewAppointment.date[1]);
+        console.log(new Date(event.start));
         if (
           !(
             new Date(event.end) < this.createNewAppointment.date[0] ||
@@ -319,12 +350,28 @@ export default {
     eventClickCalendar: function (info) {
       if (this.createNewAppointment.formVisible) return;
 
-      let e = info.event._def.extendedProps;
+      let e = info.event;
       this.loadDataSelectedReservation(e);
     },
     loadDataSelectedReservation: function (event) {
-      this.selectedReservation = null;
-      this.showSelectedReservation = false;
+      this.selectedEvent = event;
+      axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
+      axios
+        .get(
+          "http://localhost:8180/api/v1/doctor-appointments/" +
+            event.extendedProps.appID
+        )
+        .then((response) => {
+          this.selectedAppointment = response.data;
+          console.log(this.selectedAppointment);
+          if (!this.selectedAppointment.report) {
+            this.showAppointmentReport = false;
+          } else {
+            this.$store.commit("change", this.selectedAppointment);
+            this.showAppointmentReport = true;
+          }
+        });
     },
     closeSelectedReservation: function () {
       this.selectedReservation = null;
@@ -333,6 +380,9 @@ export default {
     changeChosenPerson(value) {
       this.chosenPatientId = value.id;
     },
+    goBack(){
+        this.showAppointmentReport = false;
+    }
   },
 };
 </script>
