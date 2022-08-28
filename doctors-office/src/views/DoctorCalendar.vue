@@ -2,16 +2,16 @@
   <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
     <div class="row">
-      <div v-if="!showSelectedAppointment" class="col">
+      <div v-if="!showSelectedAppointment && !showAppointmentReport" class="col">
         <h1>Calendar</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>
 
-    <div v-else>
+    <div v-else-if="showSelectedAppointment">
         <table width="100%" style="margin-left:5em;margin-right:5em">
             <tr>
-                <th style="text-align:left" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer" v-on:click="goBack()"></i></th>
+                <th style="text-align:left" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></th>
                 <th width="50%"><h1>{{selectedEvent.extendedProps.services}}</h1></th>
                 <th width="25%" style="text-align:right"></th>
             </tr>
@@ -89,8 +89,9 @@
       <button type="button" class="btn btn-primary" v-on:click="finishAppointment()">Završi pregled</button>
       </div>
 
-      <div v-if="showAppointmentReport">
-        aa
+      <div v-else-if="showAppointmentReport">
+        <div style="text-align:left;margin-bottom:1em;" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></div>
+        <Report />
       </div>
     </div>
 
@@ -114,6 +115,7 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
 import DiseaseList from "@/components/DiseaseList.vue"
+import Report from "@/components/Report.vue"
 
 export default {
   name: "DoctorCalendar",
@@ -121,7 +123,8 @@ export default {
     FullCalendar,
     Datepicker,
     PatientList,
-    DiseaseList
+    DiseaseList,
+    Report
   },
   data: function () {
     return {
@@ -271,6 +274,7 @@ export default {
           this.showAppointmentReport = false;
         }
          else{
+          this.$store.commit('change',this.selectedAppointment)
           this.showAppointmentReport = true;
          }
       });   
@@ -288,6 +292,7 @@ export default {
     },
     goBack(){
         this.showSelectedAppointment = false;
+        this.showAppointmentReport = false;
     },
     openSearch(){
       this.searchClosed = false;

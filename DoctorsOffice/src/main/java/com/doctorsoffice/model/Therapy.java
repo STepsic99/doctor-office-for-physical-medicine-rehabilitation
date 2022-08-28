@@ -25,6 +25,20 @@ public class Therapy {
 		this.service = service;
 		this.note = note;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Service getService() {
+		return service;
+	}
+
+	public String getNote() {
+		return note;
+	}
+	
+	
 	
 	
 
