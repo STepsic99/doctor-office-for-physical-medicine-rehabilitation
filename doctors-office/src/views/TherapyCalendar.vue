@@ -30,16 +30,7 @@
                 Zakažite terapije
               </h4>
               <br />
-              <div
-                style="
-                  margin-top: 1.33em;
-                  width: 98%;
-                  margin-right: 0;
-                  margin-bottom: 5em;
-                "
-              >
-                
-              </div>
+              <br />
               <div>
                 <table width="100%" style="border-collapse:separate; border-spacing:1em 1em">
                     <tr>
@@ -49,14 +40,23 @@
                 /></td>
                     </tr>
                   <tr v-for="app in newAppointments" :key="app.id">
-                    <td>
+                    <td width="35%">
                       <Datepicker
                         v-on:click="showcreateNewAppointmentForm()"
                         v-model="app.date"
                         range
                       ></Datepicker>
                     </td>
-                    <td>
+                    <td width="50%">
+                        <VueMultiselect
+                        v-model="app.services"
+                        :options="services"
+                        :multiple="true"
+                        :close-on-select="true"
+                        label="name"
+                        track-by="name">
+                        </VueMultiselect>
+                        <!--
                       <select
                         class="form-select"
                         v-model="app.type"
@@ -69,9 +69,9 @@
                         >
                           {{ option.name }}
                         </option>
-                      </select>
+                      </select> -->
                     </td>
-                    <td style="text-align:right">
+                    <td style="text-align:right" width="5%">
                         <i
             class="fa fa-times"
             aria-hidden="true"
@@ -121,6 +121,7 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
 import Report from "@/components/Report.vue";
+import VueMultiselect from 'vue-multiselect'
 
 export default {
   name: "TherapyCalendar",
@@ -129,6 +130,7 @@ export default {
     Datepicker,
     PatientList,
     Report,
+    VueMultiselect 
   },
   data: function () {
     return {
@@ -187,7 +189,9 @@ export default {
       showAppointmentReport: false,
       selectedEvent: {},
       selectedAppointment: {},
-      cnt: 0
+      cnt: 0,
+      selected: null,
+      options: []
     };
   },
   mounted: function () {
@@ -241,7 +245,7 @@ export default {
         this.createNewAppointment.valid = false;
       }
       this.cnt++;
-      this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)]})
+      this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)], services:[]})
     },
     subAppointment(a){
       for (var i = 0; i < this.newAppointments.length; i++) {
@@ -269,37 +273,40 @@ export default {
 
       const pickedServices = [];
       pickedServices.push(this.createNewAppointment.type);
-      axios.defaults.headers.common.Authorization =
-        "Bearer " + window.sessionStorage.getItem("jwt");
-      axios
-        .post("http://localhost:8180/api/v1/appointments", {
-          patientID: this.chosenPatientId,
-          medicalWorkerID: 1,
-          appointments: [
-            {
-              startTime: new Date(
+      const tempAppointments=[]
+      for(let i = 0; i<this.newAppointments.length;i++){
+        tempAppointments.push(
+            {startTime: new Date(
                 Date.UTC(
-                  this.createNewAppointment.date[0].getFullYear(),
-                  this.createNewAppointment.date[0].getMonth(),
-                  this.createNewAppointment.date[0].getDate(),
-                  this.createNewAppointment.date[0].getHours(),
-                  this.createNewAppointment.date[0].getMinutes(),
-                  this.createNewAppointment.date[0].getSeconds()
+                  this.newAppointments[i].date[0].getFullYear(),
+                  this.newAppointments[i].date[0].getMonth(),
+                  this.newAppointments[i].date[0].getDate(),
+                  this.newAppointments[i].date[0].getHours(),
+                  this.newAppointments[i].date[0].getMinutes(),
+                  this.newAppointments[i].date[0].getSeconds()
                 )
               ),
               endTime: new Date(
                 Date.UTC(
-                  this.createNewAppointment.date[1].getFullYear(),
-                  this.createNewAppointment.date[1].getMonth(),
-                  this.createNewAppointment.date[1].getDate(),
-                  this.createNewAppointment.date[1].getHours(),
-                  this.createNewAppointment.date[1].getMinutes(),
-                  this.createNewAppointment.date[1].getSeconds()
+                  this.newAppointments[i].date[1].getFullYear(),
+                  this.newAppointments[i].date[1].getMonth(),
+                  this.newAppointments[i].date[1].getDate(),
+                  this.newAppointments[i].date[1].getHours(),
+                  this.newAppointments[i].date[1].getMinutes(),
+                  this.newAppointments[i].date[1].getSeconds()
                 )
               ),
-              services: pickedServices,
-            },
-          ],
+            services: this.newAppointments[i].services
+            }           
+            )
+      }
+      axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt"); 
+      axios
+        .post("http://localhost:8180/api/v1/appointments", {
+          patientID: this.chosenPatientId,
+          medicalWorkerID: 2,
+          appointments: tempAppointments
         })
         .then((response) => {
           console.log(response.data);
@@ -365,6 +372,6 @@ export default {
 };
 </script>
 
-
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
 </style>
