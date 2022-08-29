@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentDTO;
 import com.doctorsoffice.dto.DoctorAppointmentDTO;
-import com.doctorsoffice.dto.NewPatientRequestDTO;
-import com.doctorsoffice.dto.NewPatientResponseDTO;
 import com.doctorsoffice.dto.NewReportRequestDTO;
 import com.doctorsoffice.dto.NewReportResponseDTO;
 import com.doctorsoffice.model.AppointmentDoctor;

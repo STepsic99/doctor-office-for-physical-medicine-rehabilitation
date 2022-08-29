@@ -14,7 +14,8 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="/" class="nav-item nav-link active">Naslovna</a>
-                <a href="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar termina</a>
+                <a href="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar pregleda</a>
+                <a href="/calendar-therapy" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar terapija</a>
                 <a href="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</a>
                 <a href="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
                 <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>

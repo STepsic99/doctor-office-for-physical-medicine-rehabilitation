@@ -7,6 +7,7 @@ import PatientCalendar from '../views/PatientCalendar.vue'
 import PatientsProfiles from '../views/PatientsProfiles.vue'
 import PatientProfile from '../views/PatientProfile.vue'
 import DoctorCalendar from '../views/DoctorCalendar.vue'
+import TherapyCalendar from '../views/TherapyCalendar.vue'
 
 const routes = [
   {
@@ -53,7 +54,13 @@ const routes = [
     name: 'doctorCalendar',
     component: DoctorCalendar,
     meta: { requiresAuth: true, role: "ROLE_DOCTOR" },
-  }
+  },
+  {
+    path: '/calendar-therapy',
+    name: 'therapyCalendar',
+    component: TherapyCalendar,
+    meta: { requiresAuth: true, role: "ROLE_NURSE" },
+  },
 ]
 
 const router = createRouter({
