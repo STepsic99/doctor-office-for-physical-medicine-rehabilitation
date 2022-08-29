@@ -1,10 +1,12 @@
 package com.doctorsoffice.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.doctorsoffice.dto.NewAppointmentRequestDTO;
+import com.doctorsoffice.dto.NewAppointmentsRequestDTO;
 import com.doctorsoffice.model.Appointment;
 import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.model.AppointmentPhysiotherapist;
@@ -33,19 +35,19 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 
 	@Override
-	public Appointment create(NewAppointmentRequestDTO dto) {
+	public List<Appointment> create(NewAppointmentsRequestDTO dto) {
 		MedicalWorker medicalWorker = medicalWorkerService.findById(dto.getMedicalWorkerID());
-		System.out.println(medicalWorker.getClass());
+		List<Appointment> appointments = new ArrayList<Appointment>();
 		if(medicalWorker instanceof Doctor) {
-			AppointmentDoctor newAppointment = new AppointmentDoctor(patientService.findById(dto.getPatientID()),dto.getServices(),medicalWorker,dto.getStartTime(),dto.getEndTime());
-			appointmentRepository.save(newAppointment);
-			return newAppointment;
+			for(NewAppointmentRequestDTO appRequest: dto.getAppointments()) {
+				appointments.add(new AppointmentDoctor(patientService.findById(dto.getPatientID()),appRequest.getServices(),medicalWorker,appRequest.getStartTime(),appRequest.getEndTime()));
+			}
 		} else if(medicalWorker instanceof Physiotherapist) {
-			AppointmentPhysiotherapist newAppointment = new AppointmentPhysiotherapist(patientService.findById(dto.getPatientID()),dto.getServices(),medicalWorker,dto.getStartTime(),dto.getEndTime());
-			appointmentRepository.save(newAppointment);
-			return newAppointment;
+			for(NewAppointmentRequestDTO appRequest: dto.getAppointments()) {
+				appointments.add(new AppointmentPhysiotherapist(patientService.findById(dto.getPatientID()),appRequest.getServices(),medicalWorker,appRequest.getStartTime(),appRequest.getEndTime()));
+			}
 		}
-		return null;
+		return appointmentRepository.saveAll(appointments);
 	}
 
 

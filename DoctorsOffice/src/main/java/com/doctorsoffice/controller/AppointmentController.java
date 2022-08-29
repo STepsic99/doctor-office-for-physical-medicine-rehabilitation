@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.NewAppointmentRequestDTO;
 import com.doctorsoffice.dto.NewAppointmentResponseDTO;
+import com.doctorsoffice.dto.NewAppointmentsRequestDTO;
+import com.doctorsoffice.dto.NewAppointmentsResponseDTO;
 import com.doctorsoffice.service.AppointmentService;
 
 @RestController
@@ -24,7 +26,7 @@ private final AppointmentService appointmentService;
 	}
 	
 	@PostMapping
-    public ResponseEntity<NewAppointmentResponseDTO> create(@RequestBody NewAppointmentRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new NewAppointmentResponseDTO(appointmentService.create(dto)));
+    public ResponseEntity<NewAppointmentsResponseDTO> create(@RequestBody NewAppointmentsRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new NewAppointmentsResponseDTO(appointmentService.create(dto)));
 	}
 }

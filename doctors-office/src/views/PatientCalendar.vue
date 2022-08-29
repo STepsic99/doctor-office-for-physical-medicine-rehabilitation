@@ -137,57 +137,6 @@ export default {
         this.createNewAppointment.valid = false;
       }
     },
-    addNewAppointment: async function () {
-      if (!this.oldPatient) {
-        axios.defaults.headers.common.Authorization =
-        "Bearer " + window.sessionStorage.getItem("jwt");
-        const response = await axios.post(
-          "http://localhost:8180/api/v1/patients",
-          this.newPatient
-        );
-        
-        if (!response.data) {
-          return;
-        }
-
-        this.chosenPatientId = response.data.id;
-      }
-
-      const pickedServices = [];
-      pickedServices.push(this.createNewAppointment.type);
-      axios.defaults.headers.common.Authorization =
-        "Bearer " + window.sessionStorage.getItem("jwt");
-      axios
-        .post("http://localhost:8180/api/v1/appointments", {
-          patientID: this.chosenPatientId,
-          startTime: new Date(
-            Date.UTC(
-              this.createNewAppointment.date[0].getFullYear(),
-              this.createNewAppointment.date[0].getMonth(),
-              this.createNewAppointment.date[0].getDate(),
-              this.createNewAppointment.date[0].getHours(),
-              this.createNewAppointment.date[0].getMinutes(),
-              this.createNewAppointment.date[0].getSeconds()
-            )
-          ),
-          endTime: new Date(
-            Date.UTC(
-              this.createNewAppointment.date[1].getFullYear(),
-              this.createNewAppointment.date[1].getMonth(),
-              this.createNewAppointment.date[1].getDate(),
-              this.createNewAppointment.date[1].getHours(),
-              this.createNewAppointment.date[1].getMinutes(),
-              this.createNewAppointment.date[1].getSeconds()
-            )
-          ),
-          services: pickedServices,
-          medicalWorkerID: 1,
-        })
-        .then((response) => {
-          console.log(response.data);
-          window.location.reload();
-        });
-    },
     overlap: function () {
       for (const event of this.calendarOptions.events) {
         console.log(event.end)

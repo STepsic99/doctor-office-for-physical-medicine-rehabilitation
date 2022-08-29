@@ -300,7 +300,8 @@ export default {
       axios
         .post("http://localhost:8180/api/v1/appointments", {
           patientID: this.chosenPatientId,
-          startTime: new Date(
+           medicalWorkerID: 1,
+           appointments: [{startTime: new Date(
             Date.UTC(
               this.createNewAppointment.date[0].getFullYear(),
               this.createNewAppointment.date[0].getMonth(),
@@ -320,8 +321,7 @@ export default {
               this.createNewAppointment.date[1].getSeconds()
             )
           ),
-          services: pickedServices,
-          medicalWorkerID: 1,
+          services: pickedServices}]     
         })
         .then((response) => {
           console.log(response.data);

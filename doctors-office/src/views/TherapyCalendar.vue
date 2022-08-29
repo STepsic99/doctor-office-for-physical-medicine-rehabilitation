@@ -7,79 +7,103 @@
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>
-    
 
-    <div class="row d-flex justify-content-center">
-      <button
-        v-if="!createNewAppointment.formVisible && !showSelectedReservation"
-        class="btn btn-primary mx-2 col-4"
-        v-on:click="createNewAppointment.formVisible = true"
+      <div class="row d-flex justify-content-center">
+        <button
+          v-if="!createNewAppointment.formVisible && !showSelectedReservation"
+          class="btn btn-primary mx-2 col-4"
+          v-on:click="createNewAppointment.formVisible = true"
+        >
+          Zakažite terapije
+        </button>
+      </div>
+
+      <div
+        v-if="createNewAppointment.formVisible"
+        class="row d-flex justify-content-center"
+        style="margin-top: 30px"
       >
-        Dodaj pregled
-      </button>
-    </div>
-
-    <div
-      v-if="createNewAppointment.formVisible"
-      class="row d-flex justify-content-center"
-      style="margin-top: 30px"
-    >
-      <div class="col-10">
-        <div class="card">
-          <div class="card-body">
-            <h4 style="display: inline" class="card-title">
-              Kreirajte novi pregled
-            </h4>
-            <br />
-            <span style="margin-top: 1.33em" class="row">
-              <div class="col-5">
-                <Datepicker
-                  v-on:click="showcreateNewAppointmentForm()"
-                  v-model="createNewAppointment.date"
-                  range
-                ></Datepicker>
-                <select
-                  class="form-select"
-                  v-model="createNewAppointment.type"
-                  style="margin-top: 30px"
-                >
-                  <option
-                    v-for="option in services"
-                    :key="option.id"
-                    :value="option"
-                  >
-                    {{ option.name }}
-                  </option>
-                </select>
+        <div class="col-10">
+          <div class="card">
+            <div class="card-body">
+              <h4 style="display: inline" class="card-title">
+                Zakažite terapije
+              </h4>
+              <br />
+              <div
+                style="
+                  margin-top: 1.33em;
+                  width: 98%;
+                  margin-right: 0;
+                  margin-bottom: 5em;
+                "
+              >
+                
               </div>
-              <div style="padding-left: 5%" class="col-6">
-                <PatientList
+              <div>
+                <table width="100%" style="border-collapse:separate; border-spacing:1em 1em">
+                    <tr>
+                        <td colspan="3"><PatientList
                   :existingPatient="oldPatient"
                   @chosenPerson="changeChosenPerson"
-                />
+                /></td>
+                    </tr>
+                  <tr v-for="app in newAppointments" :key="app.id">
+                    <td>
+                      <Datepicker
+                        v-on:click="showcreateNewAppointmentForm()"
+                        v-model="app.date"
+                        range
+                      ></Datepicker>
+                    </td>
+                    <td>
+                      <select
+                        class="form-select"
+                        v-model="app.type"
+                        style="display: inline-block; float: right"
+                      >
+                        <option
+                          v-for="option in services"
+                          :key="option.id"
+                          :value="option"
+                        >
+                          {{ option.name }}
+                        </option>
+                      </select>
+                    </td>
+                    <td style="text-align:right">
+                        <i
+            class="fa fa-times"
+            aria-hidden="true"
+            style="color: red; zoom: 2; cursor: pointer"
+            v-on:click="subAppointment(app)"
+                            ></i>
+                        </td>
+                  </tr>
+                </table>
               </div>
-            </span>
-            <br />
-            <p class="card-text text-danger">{{ createNewAppointment.msg }}</p>
-            <button
-              class="btn btn-danger m-1"
-              v-on:click="createNewAppointment.formVisible = false"
-            >
-              Odustani
-            </button>
-            <button
-              :disabled="!createNewAppointment.valid"
-              class="btn btn-success m-1"
-              v-on:click="addNewAppointment()"
-            >
-              Kreiraj
-            </button>
+              <br />
+              <p class="card-text text-danger">
+                {{ createNewAppointment.msg }}
+              </p>
+              <button
+                class="btn btn-danger m-1"
+                v-on:click="createNewAppointment.formVisible = false"
+              >
+                Odustani
+              </button>
+              <button
+                :disabled="!createNewAppointment.valid"
+                class="btn btn-success m-1"
+                v-on:click="addNewAppointment()"
+              >
+                Kreiraj
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
-
   </div>
 </template>
 
@@ -104,7 +128,7 @@ export default {
     FullCalendar,
     Datepicker,
     PatientList,
-    Report
+    Report,
   },
   data: function () {
     return {
@@ -120,6 +144,8 @@ export default {
         msg: "",
         valid: true,
       },
+
+      newAppointments:[],
 
       calendarOptions: {
         plugins: [dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin],
@@ -160,7 +186,8 @@ export default {
       appointments: [],
       showAppointmentReport: false,
       selectedEvent: {},
-      selectedAppointment: {}
+      selectedAppointment: {},
+      cnt: 0
     };
   },
   mounted: function () {
@@ -169,12 +196,12 @@ export default {
     axios.defaults.headers.common.Authorization =
       "Bearer " + window.sessionStorage.getItem("jwt");
     axios
-      .get("http://localhost:8180/api/v1/services/doctor")
+      .get("http://localhost:8180/api/v1/services/physiotherapist")
       .then((response) => {
         this.services = response.data;
       });
     axios
-      .get("http://localhost:8180/api/v1/doctor-appointments")
+      .get("http://localhost:8180/api/v1/physiotherapist-appointments")
       .then((response) => {
         this.appointments = response.data;
         this.calendarOptions.events = [];
@@ -199,6 +226,7 @@ export default {
       this.createNewAppointment.valid = true;
     },
     selectInCalendar: function (selectedDate) {
+        console.log(this.newAppointments)
       if (this.showSelectedReservation) return;
       this.createNewAppointment.msg = "";
       this.createNewAppointment.valid = true;
@@ -211,6 +239,16 @@ export default {
         this.createNewAppointment.msg =
           "Error, new term have overlap with other term";
         this.createNewAppointment.valid = false;
+      }
+      this.cnt++;
+      this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)]})
+    },
+    subAppointment(a){
+      for (var i = 0; i < this.newAppointments.length; i++) {
+        if (this.newAppointments[i].id == a.id) {
+          this.newAppointments.splice(i, 1);
+          break;
+        }
       }
     },
     addNewAppointment: async function () {
@@ -236,28 +274,32 @@ export default {
       axios
         .post("http://localhost:8180/api/v1/appointments", {
           patientID: this.chosenPatientId,
-          startTime: new Date(
-            Date.UTC(
-              this.createNewAppointment.date[0].getFullYear(),
-              this.createNewAppointment.date[0].getMonth(),
-              this.createNewAppointment.date[0].getDate(),
-              this.createNewAppointment.date[0].getHours(),
-              this.createNewAppointment.date[0].getMinutes(),
-              this.createNewAppointment.date[0].getSeconds()
-            )
-          ),
-          endTime: new Date(
-            Date.UTC(
-              this.createNewAppointment.date[1].getFullYear(),
-              this.createNewAppointment.date[1].getMonth(),
-              this.createNewAppointment.date[1].getDate(),
-              this.createNewAppointment.date[1].getHours(),
-              this.createNewAppointment.date[1].getMinutes(),
-              this.createNewAppointment.date[1].getSeconds()
-            )
-          ),
-          services: pickedServices,
           medicalWorkerID: 1,
+          appointments: [
+            {
+              startTime: new Date(
+                Date.UTC(
+                  this.createNewAppointment.date[0].getFullYear(),
+                  this.createNewAppointment.date[0].getMonth(),
+                  this.createNewAppointment.date[0].getDate(),
+                  this.createNewAppointment.date[0].getHours(),
+                  this.createNewAppointment.date[0].getMinutes(),
+                  this.createNewAppointment.date[0].getSeconds()
+                )
+              ),
+              endTime: new Date(
+                Date.UTC(
+                  this.createNewAppointment.date[1].getFullYear(),
+                  this.createNewAppointment.date[1].getMonth(),
+                  this.createNewAppointment.date[1].getDate(),
+                  this.createNewAppointment.date[1].getHours(),
+                  this.createNewAppointment.date[1].getMinutes(),
+                  this.createNewAppointment.date[1].getSeconds()
+                )
+              ),
+              services: pickedServices,
+            },
+          ],
         })
         .then((response) => {
           console.log(response.data);
@@ -316,9 +358,9 @@ export default {
     changeChosenPerson(value) {
       this.chosenPatientId = value.id;
     },
-    goBack(){
-        this.showAppointmentReport = false;
-    }
+    goBack() {
+      this.showAppointmentReport = false;
+    },
   },
 };
 </script>

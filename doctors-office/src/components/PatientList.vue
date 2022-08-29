@@ -1,19 +1,23 @@
 <template>
 <div v-if="existingPatient">
-<form v-if="!personChosen" class="row d-flex justify-content-between">
-  <div class="col-11">
-  <div class="input-group">
-<select class="form-select" v-model="searchOption" id="inputGroupSelect01">   
-    <option value="1">Ime i prezime</option>
-    <option value="2">JMBG</option>
-  </select>
-  <input type="text" v-model="searchedNameID" class="form-control">
-  <input v-if="searchOption==1" type="text" v-model="searchedLastName" class="form-control">
-</div>
-  </div>
-  <div class="col-1">
-    <button type="button" class="btn btn-primary mb-3" v-on:click="searchPeople()">Pretraži</button>
-  </div>
+<form style="margin-bottom:1em" v-if="!personChosen">
+    <table width="100%">
+      <tr>
+        <td>
+          <div class="input-group">
+          <select class="form-select" v-model="searchOption" id="inputGroupSelect01">   
+          <option value="1">Ime i prezime</option>
+          <option value="2">JMBG</option>
+        </select>
+        <input type="text" v-model="searchedNameID" class="form-control">
+        <input v-if="searchOption==1" type="text" v-model="searchedLastName" class="form-control">
+      </div>
+        </td>
+        <td style="text-align:right">
+        <button type="button" class="btn btn-primary" v-on:click="searchPeople()">Pretraži</button>
+        </td>
+        </tr>
+    </table>    
 </form>
 <div v-if="showList">
 <table style="width: 100%;">
