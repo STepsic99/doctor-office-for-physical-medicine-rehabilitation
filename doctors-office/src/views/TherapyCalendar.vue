@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
-    <div v-if="!showAppointmentReport" class="row">
+    <div class="row">
       <div class="col">
         <h1>Calendar</h1>
         <FullCalendar :options="calendarOptions" />
@@ -10,7 +10,7 @@
 
       <div class="row d-flex justify-content-center">
         <button
-          v-if="!createNewAppointment.formVisible && !showSelectedReservation"
+          v-if="!createNewAppointment.formVisible && !showAppointment"
           class="btn btn-primary mx-2 col-4"
           v-on:click="createNewAppointment.formVisible = true"
         >
@@ -56,20 +56,6 @@
                         label="name"
                         track-by="name">
                         </VueMultiselect>
-                        <!--
-                      <select
-                        class="form-select"
-                        v-model="app.type"
-                        style="display: inline-block; float: right"
-                      >
-                        <option
-                          v-for="option in services"
-                          :key="option.id"
-                          :value="option"
-                        >
-                          {{ option.name }}
-                        </option>
-                      </select> -->
                     </td>
                     <td style="text-align:right" width="5%">
                         <i
@@ -103,6 +89,70 @@
           </div>
         </div>
       </div>
+
+              <div v-else-if="showAppointment" 
+    class="row d-flex justify-content-center"
+        style="margin-top: 30px">  
+               <div class="col-10">
+          <div class="card">
+            <div class="card-body">
+              <h4 style="display: inline" class="card-title">
+                O terminu
+              </h4>
+              <span style="float:right">{{transformDate(this.currentAppointment.start)}}</span>
+              <br />
+             <table style="width: 100%;border-collapse:separate; border-spacing:2em 2em;">
+            <tbody>
+            <tr>
+                <td style="vertical-align: top;text-align:left;padding-left:5em">
+                    <div>
+                    <img class="img-fluid  thumb" src="../assets/person.jpg" alt="">
+                </div>
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">{{this.currentAppointment.patientFirstName}} {{this.currentAppointment.patientLastName}}</h5>
+                <i class="fas fa-id-card" aria-hidden="true"></i> {{this.currentAppointment.patientPersonalID}}
+                </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                </td>
+                </tr>
+
+                    <tr>
+                         <td style="vertical-align: top;text-align:left;padding-left:5em">
+                           Usluge:  
+                         </td>
+                        <td style="vertical-align: top;text-align:left;">
+                            <div>                 
+                                <span  v-for="s in this.currentAppointment.services" :key="s.id" class="badge bg-primary m-1">{{s.name}}</span>                         
+                            </div>
+                        </td>
+                    </tr>
+                <tr>
+                <td></td>
+                <td style="text-align:left;padding-top:2em">
+                       <div>
+                <button
+              class="btn btn-danger"
+              v-on:click="goBack()"
+            >
+              Zatvori
+            </button>
+              </div>
+                </td>
+                <td></td>
+                </tr>
+            </tbody>
+            </table>
+             
+            </div>
+          </div>
+        </div>
+    </div>
+
+
     </div>
   </div>
 </template>
@@ -137,8 +187,6 @@ export default {
       terms: [],
 
       selectedReservation: {},
-      showSelectedReservation: false,
-
       createNewAppointment: {
         date: [],
         formVisible: false,
@@ -186,12 +234,14 @@ export default {
         personalID: "",
       },
       appointments: [],
-      showAppointmentReport: false,
       selectedEvent: {},
       selectedAppointment: {},
       cnt: 0,
       selected: null,
-      options: []
+      options: [],
+      showAppointment: false,
+      currentAppointment: {},
+      nonPassedAppointment: false
     };
   },
   mounted: function () {
@@ -231,7 +281,6 @@ export default {
     },
     selectInCalendar: function (selectedDate) {
         console.log(this.newAppointments)
-      if (this.showSelectedReservation) return;
       this.createNewAppointment.msg = "";
       this.createNewAppointment.valid = true;
       this.createNewAppointment.date[0] = new Date(selectedDate.start);
@@ -354,28 +403,40 @@ export default {
         .then((response) => {
           this.selectedAppointment = response.data;
           console.log(this.selectedAppointment);
-          if (!this.selectedAppointment.report) {
-            this.showAppointmentReport = false;
+          if (this.selectedAppointment.patientPresent!='UNSET') {
+            this.showAppointment = true;
+            this.currentAppointment = this.selectedAppointment;
+            this.nonPassedAppointment = false;
           } else {
-            this.$store.commit("change", this.selectedAppointment);
-            this.showAppointmentReport = true;
+            this.currentAppointment = this.selectedAppointment;
+            this.nonPassedAppointment = true;
+            this.showAppointment = true;
           }
         });
-    },
-    closeSelectedReservation: function () {
-      this.selectedReservation = null;
-      this.showSelectedReservation = false;
     },
     changeChosenPerson(value) {
       this.chosenPatientId = value.id;
     },
     goBack() {
-      this.showAppointmentReport = false;
+      this.showAppointment = false;
     },
+    transformDate(rawDate){
+        rawDate = new Date(rawDate)
+        return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
+    }
   },
 };
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
+.thumb {
+  
+    width: 80px;
+    height: 80px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 20%;
+}
 </style>

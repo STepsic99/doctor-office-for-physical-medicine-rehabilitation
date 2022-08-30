@@ -139,8 +139,72 @@
         </div>
       </div>
     </div>
+
+        <div v-else-if="showAppointment" 
+    class="row d-flex justify-content-center"
+        style="margin-top: 30px">
+       
+               <div class="col-10">
+          <div class="card">
+            <div class="card-body">
+              <h4 style="display: inline" class="card-title">
+                O terminu
+              </h4>
+              <span style="float:right">{{transformDate(this.currentAppointment.start)}}</span>
+              <br />
+             <table style="width: 100%;border-collapse:separate; border-spacing:2em 2em;">
+            <tbody>
+            <tr>
+                <td style="vertical-align: top;text-align:left;padding-left:5em">
+                    <div>
+                    <img class="img-fluid  thumb" src="../assets/person.jpg" alt="">
+                </div>
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">{{this.currentAppointment.patientFirstName}} {{this.currentAppointment.patientLastName}}</h5>
+                <i class="fas fa-id-card" aria-hidden="true"></i> {{this.currentAppointment.patientPersonalID}}
+                </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                </td>
+                </tr>
+
+                    <tr>
+                         <td style="vertical-align: top;text-align:left;padding-left:5em">
+                           Usluge:  
+                         </td>
+                        <td style="vertical-align: top;text-align:left;">
+                            <div>                 
+                                <span  v-for="s in this.currentAppointment.services" :key="s.id" class="badge bg-primary m-1">{{s.name}}</span>                         
+                            </div>
+                        </td>
+                    </tr>
+                <tr>
+                <td></td>
+                <td style="text-align:left;padding-top:2em">
+                       <div>
+                <button
+              class="btn btn-danger"
+              v-on:click="goBack()"
+            >
+              Zatvori
+            </button>
+              </div>
+                </td>
+                <td></td>
+                </tr>
+            </tbody>
+            </table>
+             
+            </div>
+          </div>
+        </div>
     </div>
-    <div v-else>
+
+    </div>
+    <div v-else-if="showAppointmentReport">
         <div style="text-align:left;margin-bottom:1em;" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></div>
         <Report />
       </div>
@@ -224,7 +288,9 @@ export default {
       appointments: [],
       showAppointmentReport: false,
       selectedEvent: {},
-      selectedAppointment: {}
+      selectedAppointment: {},
+      showAppointment:false,
+      currentAppointment: {}
     };
   },
   mounted: function () {
@@ -367,9 +433,12 @@ export default {
           console.log(this.selectedAppointment);
           if (!this.selectedAppointment.report) {
             this.showAppointmentReport = false;
+            this.showAppointment = true;
+            this.currentAppointment = this.selectedAppointment;
           } else {
             this.$store.commit("change", this.selectedAppointment);
             this.showAppointmentReport = true;
+            this.showAppointment = false;
           }
         });
     },
@@ -382,6 +451,11 @@ export default {
     },
     goBack(){
         this.showAppointmentReport = false;
+        this.showAppointment = false;
+    },
+    transformDate(rawDate){
+        rawDate = new Date(rawDate)
+        return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
     }
   },
 };
@@ -389,4 +463,13 @@ export default {
 
 
 <style scoped>
+.thumb {
+  
+    width: 80px;
+    height: 80px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 20%;
+}
 </style>
