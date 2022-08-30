@@ -17,6 +17,7 @@
                 <a href="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar pregleda</a>
                 <a href="/calendar-therapy" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar terapija</a>
                 <a href="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</a>
+                <a href="/physiotherapist/calendar" v-if="this.role==='ROLE_PHYSIOTHERAPIST'" class="nav-item nav-link">Kalendar termina</a>
                 <a href="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
                 <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
                 <a href="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>

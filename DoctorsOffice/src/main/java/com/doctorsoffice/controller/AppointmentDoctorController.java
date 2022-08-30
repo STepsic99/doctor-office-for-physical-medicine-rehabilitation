@@ -43,7 +43,7 @@ private final AppointmentDoctorService appointmentDoctorService;
 	   }
 	
 	@GetMapping(value = "{appointmentId}")
-	 public ResponseEntity<DoctorAppointmentDTO> findAll(@PathVariable Long appointmentId) {	
+	 public ResponseEntity<DoctorAppointmentDTO> find(@PathVariable Long appointmentId) {	
 		 	AppointmentDoctor appointment = appointmentDoctorService.findById(appointmentId);		 	
 	        return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        

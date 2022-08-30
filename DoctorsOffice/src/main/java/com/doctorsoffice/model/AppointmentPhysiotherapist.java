@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 public class AppointmentPhysiotherapist extends Appointment{
 	
-	private Boolean patientPresent;
+	@Enumerated(EnumType.STRING)
+	private PatientPresence patientPresent = PatientPresence.UNSET;
 	private String note;
 	
 	public AppointmentPhysiotherapist() {
@@ -18,6 +21,21 @@ public class AppointmentPhysiotherapist extends Appointment{
 			LocalDateTime startTime, LocalDateTime endTime) {
 		super(patient, services, medicalWorker, startTime, endTime);
 	}
+	public PatientPresence getPatientPresent() {
+		return patientPresent;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setPatientPresent(PatientPresence patientPresent) {
+		this.patientPresent = patientPresent;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	
+	
+	
 
 	
 }

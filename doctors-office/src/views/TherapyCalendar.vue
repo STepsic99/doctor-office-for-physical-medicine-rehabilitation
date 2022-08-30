@@ -245,7 +245,11 @@ export default {
         this.createNewAppointment.valid = false;
       }
       this.cnt++;
-      this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)], services:[]})
+      if(this.newAppointments.length == 0){
+          this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)], services:[]})
+      } else{
+         this.newAppointments.push({id:this.cnt, date:[new Date(selectedDate.start),new Date(new Date(selectedDate.end) - 1000)], services:this.newAppointments[this.newAppointments.length-1].services})
+      }     
     },
     subAppointment(a){
       for (var i = 0; i < this.newAppointments.length; i++) {
@@ -344,7 +348,7 @@ export default {
         "Bearer " + window.sessionStorage.getItem("jwt");
       axios
         .get(
-          "http://localhost:8180/api/v1/doctor-appointments/" +
+          "http://localhost:8180/api/v1/physiotherapist-appointments/" +
             event.extendedProps.appID
         )
         .then((response) => {
