@@ -10,5 +10,5 @@ public interface AppointmentDoctorService {
 	List<AppointmentDoctor> findAll();
 	AppointmentDoctor findById(Long id);
 	AppointmentDoctor addReport(NewReportRequestDTO dto, Long appointmentId);
-	
+	AppointmentDoctor findLastByPatientId(Long id);
 }

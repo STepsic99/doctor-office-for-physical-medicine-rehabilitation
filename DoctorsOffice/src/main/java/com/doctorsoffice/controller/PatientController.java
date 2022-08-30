@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentDTO;
+import com.doctorsoffice.dto.DoctorAppointmentDTO;
 import com.doctorsoffice.dto.NewPatientRequestDTO;
 import com.doctorsoffice.dto.NewPatientResponseDTO;
 import com.doctorsoffice.dto.PatientDTO;
 import com.doctorsoffice.dto.UpdatePatientDTO;
 import com.doctorsoffice.model.Appointment;
+import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.model.Patient;
+import com.doctorsoffice.service.AppointmentDoctorService;
 import com.doctorsoffice.service.AppointmentService;
 import com.doctorsoffice.service.PatientService;
 
@@ -33,10 +36,13 @@ public class PatientController {
 	
 	private final AppointmentService appointmentService;
 	
+	private final AppointmentDoctorService appointmentDoctorService;
+	
 	@Autowired
-	public PatientController(PatientService patientService, AppointmentService appointmentService) {
+	public PatientController(PatientService patientService, AppointmentService appointmentService,AppointmentDoctorService appointmentDoctorService) {
 		this.patientService = patientService;
 		this.appointmentService = appointmentService;
+		this.appointmentDoctorService = appointmentDoctorService;
 	}
 	
 	 @GetMapping(params = {"first-name", "last-name"})
@@ -90,6 +96,14 @@ public class PatientController {
 	 public ResponseEntity<PatientDTO> getPatientInfo(@PathVariable Long patientId) {	
 		 	Patient patient = patientService.findById(patientId);
 	        return ResponseEntity.ok(new PatientDTO(patient));
+	        
+	   }
+	 
+	 @GetMapping(value = "{patientId}/last-examination")
+	 public ResponseEntity<DoctorAppointmentDTO> findLastExaminationByPatientId(@PathVariable Long patientId) {	
+		 	AppointmentDoctor appointment = appointmentDoctorService.findLastByPatientId(patientId);
+		 	if(appointment!=null) return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
+	        return ResponseEntity.notFound().build();
 	        
 	   }
 }

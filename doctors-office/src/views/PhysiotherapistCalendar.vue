@@ -40,7 +40,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary">Vidi izveštaj</button>
+                    <button type="button" class="btn btn-primary" v-on:click="showModal()">Vidi izveštaj</button>
                 </td>
                 </tr>
 
@@ -187,6 +187,13 @@
 
     </div>
     </div>
+
+    <ReportModal
+      v-show="isModalVisible"
+      @close="closeModal"
+      v-bind:renderComp="renderComp"
+    />
+
   </div>
 </template>
 
@@ -203,7 +210,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
-import Report from "@/components/Report.vue";
+import ReportModal from "@/components/ReportModal.vue";
 
 export default {
   name: "PhysiotherapistCalendar",
@@ -211,11 +218,13 @@ export default {
     FullCalendar,
     Datepicker,
     PatientList,
-    Report
+    ReportModal
   },
   data: function () {
     return {
+      isModalVisible: false,
       terms: [],
+      renderComp: false,
 
       selectedReservation: {},
       showSelectedReservation: false,
@@ -386,7 +395,25 @@ export default {
      transformDate(rawDate){
         rawDate = new Date(rawDate)
         return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
-    }
+    },
+    showModal() {
+        axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
+      axios
+        .get(
+          "http://localhost:8180/api/v1/patients/" +
+            this.selectedAppointment.patientId+"/last-examination"
+        )
+        .then((response) => {
+          this.$store.commit("change", response.data);
+          this.renderComp = true;
+          this.isModalVisible = true;
+        });
+      },
+      closeModal() {
+        this.renderComp = false;
+        this.isModalVisible = false;
+      },
   },
 };
 </script>

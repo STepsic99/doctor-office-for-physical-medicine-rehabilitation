@@ -50,4 +50,19 @@ private final AppointmentDoctorRepository appointmentDoctorRepository;
 		return appointmentDoctorRepository.save(appointmentDoctor);
 	}
 
+	@Override
+	public AppointmentDoctor findLastByPatientId(Long id) {
+		List<AppointmentDoctor> appointments = appointmentDoctorRepository.findAllByPatientId(id);
+		AppointmentDoctor lastAppointment = null;
+		for(int i = 0;i<appointments.size();i++) {
+			if(i==0) lastAppointment = appointments.get(i);
+			else {
+				if(lastAppointment.getEndTime().isBefore(appointments.get(i).getEndTime())) {
+					lastAppointment = appointments.get(i);
+				}
+			}
+		}
+		return lastAppointment;
+	}
+
 }
