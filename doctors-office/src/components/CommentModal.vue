@@ -4,7 +4,7 @@
     <div class="modal">
       <header class="modal-header">
         <slot name="header">
-            Izveštaj
+            Komentar
         </slot>
         <button
           type="button"
@@ -17,7 +17,7 @@
 
       <section class="modal-body">
         <slot name="body">
-            <Report />
+              {{this.$store.state.appointment.note}}
         </slot>
        </section>
 
@@ -27,14 +27,10 @@
 </transition>
 </template>
 <script>
-import axios from "axios";
-import Datepicker from 'vue3-date-time-picker';
-import Report from "./Report.vue";
-    import 'vue3-date-time-picker/dist/main.css'
+ import 'vue3-date-time-picker/dist/main.css'
 export default {
-  name: "ReserveModal",
+  name: "CommentModal",
   props: ['renderComp'],
-  components: {Report},
   data: function () {
     return {
      
@@ -72,10 +68,10 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    height: 85%;
-    width: 60%;
+    height: 30%;
+    width: 30%;
      position: relative;
-  top: 40%;
+  top: 10%;
   transform: translateY(-50%);
   
     

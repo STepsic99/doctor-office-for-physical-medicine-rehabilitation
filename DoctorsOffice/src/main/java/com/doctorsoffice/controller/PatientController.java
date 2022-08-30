@@ -1,6 +1,8 @@
 package com.doctorsoffice.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentDTO;
+import com.doctorsoffice.dto.AppointmentDTOFactory;
+import com.doctorsoffice.dto.AppointmentTermDTO;
+import com.doctorsoffice.dto.AppointmentWithMedicalDocumentationDTO;
 import com.doctorsoffice.dto.DoctorAppointmentDTO;
 import com.doctorsoffice.dto.NewPatientRequestDTO;
 import com.doctorsoffice.dto.NewPatientResponseDTO;
@@ -75,11 +80,11 @@ public class PatientController {
 		}
 	 
 	 @GetMapping(value = "{patientId}/appointments")
-	 public ResponseEntity<List<AppointmentDTO>> findByPatientId(@PathVariable Long patientId) {	
+	 public ResponseEntity<List<AppointmentTermDTO>> findByPatientId(@PathVariable Long patientId) {	
 		 	List<Appointment> appointments = appointmentService.findAllByPatientId(patientId);
-		 	List<AppointmentDTO> retVal = new ArrayList<AppointmentDTO>();
+		 	List<AppointmentTermDTO> retVal = new ArrayList<AppointmentTermDTO>();
 		 	for(Appointment app: appointments) {
-		 		retVal.add(new AppointmentDTO(app));
+		 		retVal.add(new AppointmentTermDTO(app));
 		 	}
 	        return ResponseEntity.ok(retVal);
 	        
@@ -104,6 +109,19 @@ public class PatientController {
 		 	AppointmentDoctor appointment = appointmentDoctorService.findLastByPatientId(patientId);
 		 	if(appointment!=null) return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        return ResponseEntity.notFound().build();
+	        
+	   }
+	 
+	 @GetMapping(value = "{patientId}/appointments/medical-documentation")
+	 public ResponseEntity<List<AppointmentDTO>> findMedicalDocumentationByPatientId(@PathVariable Long patientId) {	
+		 	List<Appointment> appointments = appointmentService.findAllByPatientId(patientId);
+		 	Collections.sort(appointments,(x, y) -> y.getStartTime().compareTo(x.getStartTime())); 	
+		 	List<AppointmentDTO> retVal = new ArrayList<AppointmentDTO>();
+		 	for(Appointment app: appointments) {
+		 		AppointmentDTOFactory factory = new AppointmentDTOFactory();
+		 		retVal.add(factory.getAppointmentDTO(app));
+		 	}
+	        return ResponseEntity.ok(retVal);
 	        
 	   }
 }

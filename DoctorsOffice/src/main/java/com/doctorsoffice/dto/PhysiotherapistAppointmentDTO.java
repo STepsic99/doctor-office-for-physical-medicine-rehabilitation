@@ -6,10 +6,11 @@ import java.util.List;
 
 import com.doctorsoffice.model.PatientPresence;
 import com.doctorsoffice.model.Service;
+import com.doctorsoffice.model.StaffType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.doctorsoffice.model.AppointmentPhysiotherapist;
 
-public class PhysiotherapistAppointmentDTO {
+public class PhysiotherapistAppointmentDTO extends AppointmentDTO{
 	
 	private Long appID;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -28,10 +29,11 @@ public class PhysiotherapistAppointmentDTO {
 	private String note;
 	
 	public PhysiotherapistAppointmentDTO() {
-		super();
+		super(StaffType.PHYSIOTHERAPIST);
 	}
 	
 	 public PhysiotherapistAppointmentDTO(AppointmentPhysiotherapist appointment) {
+		 	super(StaffType.PHYSIOTHERAPIST);
 		 	this.appID = appointment.getId();
 			this.start = appointment.getStartTime();
 			this.end = appointment.getEndTime();

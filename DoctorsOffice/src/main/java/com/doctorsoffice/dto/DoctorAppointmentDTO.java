@@ -7,9 +7,10 @@ import java.util.List;
 import com.doctorsoffice.model.AppointmentDoctor;
 import com.doctorsoffice.model.Report;
 import com.doctorsoffice.model.Service;
+import com.doctorsoffice.model.StaffType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class DoctorAppointmentDTO {
+public class DoctorAppointmentDTO extends AppointmentDTO{
 	
 	private Long appID;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -27,10 +28,11 @@ public class DoctorAppointmentDTO {
 	private Report report;
 	
 	public DoctorAppointmentDTO() {
-		super();
+		super(StaffType.DOCTOR);
 	}
 	
 	public DoctorAppointmentDTO(AppointmentDoctor appoitnment) {
+		super(StaffType.DOCTOR);
 		this.appID = appoitnment.getId();
 		this.start = appoitnment.getStartTime();
 		this.end = appoitnment.getEndTime();

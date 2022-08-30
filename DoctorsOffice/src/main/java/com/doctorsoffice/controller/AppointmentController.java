@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.doctorsoffice.dto.NewAppointmentRequestDTO;
-import com.doctorsoffice.dto.NewAppointmentResponseDTO;
 import com.doctorsoffice.dto.NewAppointmentsRequestDTO;
 import com.doctorsoffice.dto.NewAppointmentsResponseDTO;
 import com.doctorsoffice.service.AppointmentService;

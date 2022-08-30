@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.doctorsoffice.dto.AppointmentDTO;
+import com.doctorsoffice.dto.AppointmentTermDTO;
 import com.doctorsoffice.dto.PhysiotherapistAppointmentDTO;
 import com.doctorsoffice.model.AppointmentPhysiotherapist;
 import com.doctorsoffice.service.AppointmentPhysiotherapistService;
@@ -30,11 +30,11 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 	}
 	
 	 @GetMapping
-	 public ResponseEntity<List<AppointmentDTO>> findAll() {	
+	 public ResponseEntity<List<AppointmentTermDTO>> findAll() {	
 		 	List<AppointmentPhysiotherapist> appointments = appointmentPhysiotherapistService.findAll();
-		 	List<AppointmentDTO> retVal = new ArrayList<AppointmentDTO>();
+		 	List<AppointmentTermDTO> retVal = new ArrayList<AppointmentTermDTO>();
 		 	for(AppointmentPhysiotherapist app: appointments) {
-		 		retVal.add(new AppointmentDTO(app));
+		 		retVal.add(new AppointmentTermDTO(app));
 		 	}
 	        return ResponseEntity.ok(retVal);
 	        
