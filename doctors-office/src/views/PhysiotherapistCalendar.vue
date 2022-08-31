@@ -126,7 +126,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                    
                 </td>
                 </tr>
 
@@ -165,8 +165,8 @@
                     </td>
                 </tr>
                 <tr>
-                <td></td>
-                <td style="text-align:left;padding-left:3em;padding-top:2em">
+               
+                <td colspan ='3' style="padding-top:2em">
                        <div>
                 <button
               class="btn btn-danger"
@@ -176,7 +176,6 @@
             </button>
               </div>
                 </td>
-                <td></td>
                 </tr>
             </tbody>
             </table>
@@ -405,6 +404,7 @@ export default {
             this.selectedAppointment.patientId+"/last-examination"
         )
         .then((response) => {
+          console.log(response.data)
           this.$store.commit("change", response.data);
           this.renderComp = true;
           this.isModalVisible = true;

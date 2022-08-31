@@ -90,14 +90,15 @@
         </div>
       </div>
 
-              <div v-else-if="showAppointment" 
+ <div v-else-if="showAppointment" 
     class="row d-flex justify-content-center"
-        style="margin-top: 30px">  
+        style="margin-top: 30px">
+       
                <div class="col-10">
           <div class="card">
             <div class="card-body">
               <h4 style="display: inline" class="card-title">
-                O terminu
+                Beleške o terapiji
               </h4>
               <span style="float:right">{{transformDate(this.currentAppointment.start)}}</span>
               <br />
@@ -116,7 +117,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                  <button v-if="nonPassedAppointment" type="button" class="btn btn-danger">Otkaži pregled</button>  
                 </td>
                 </tr>
 
@@ -130,9 +131,33 @@
                             </div>
                         </td>
                     </tr>
+
+                <tr v-if="!nonPassedAppointment">
+                    <td style="vertical-align: top;text-align:left;padding-left:5em">
+                        Pacijent prisutan: 
+                    </td>
+                    <td>
+                        <div style="float:left" class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" v-model="this.currentAppointment.patientPresent"  value="PRESENT">
+                        <label class="form-check-label">Da</label>
+                        </div>
+                        <div  style="float:right" class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" v-model="this.currentAppointment.patientPresent"  value="ABSENT">
+                        <label class="form-check-label">Ne</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="!nonPassedAppointment">
+                    <td style="vertical-align: top;text-align:left;padding-left:5em" >
+                        Komentar: 
+                    </td>
+                    <td>
+                       <textarea class="form-control" rows="3" v-model="this.currentAppointment.note" disabled></textarea>
+                    </td>
+                </tr>
                 <tr>
-                <td></td>
-                <td style="text-align:left;padding-top:2em">
+               
+                <td v-if="!nonPassedAppointment" colspan ='3' style="padding-top:2em">
                        <div>
                 <button
               class="btn btn-danger"
@@ -142,7 +167,19 @@
             </button>
               </div>
                 </td>
-                <td></td>
+                
+                <td v-if="nonPassedAppointment"></td>
+                <td v-if="nonPassedAppointment" style="text-align:left;padding-left:3em;padding-top:2em">
+                       <div>
+                <button
+              :class="[nonPassedAppointment ? 'btn btn-primary' : 'btn btn-danger']"
+              v-on:click="goBack()"
+            >
+              Zatvori
+            </button>
+              </div>
+                </td>
+                <td v-if="nonPassedAppointment"></td>
                 </tr>
             </tbody>
             </table>
@@ -150,6 +187,7 @@
             </div>
           </div>
         </div>
+
     </div>
 
 

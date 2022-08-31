@@ -11,7 +11,7 @@
 
     <div class="row d-flex justify-content-center">
       <button
-        v-if="!createNewAppointment.formVisible && !showSelectedReservation"
+        v-if="!createNewAppointment.formVisible && !showAppointment"
         class="btn btn-primary mx-2 col-4"
         v-on:click="createNewAppointment.formVisible = true"
       >
@@ -167,7 +167,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                    <button type="button" class="btn btn-danger">Otkaži pregled</button>
                 </td>
                 </tr>
 
@@ -186,7 +186,7 @@
                 <td style="text-align:left;padding-top:2em">
                        <div>
                 <button
-              class="btn btn-danger"
+              class="btn btn-primary"
               v-on:click="goBack()"
             >
               Zatvori
@@ -441,10 +441,6 @@ export default {
             this.showAppointment = false;
           }
         });
-    },
-    closeSelectedReservation: function () {
-      this.selectedReservation = null;
-      this.showSelectedReservation = false;
     },
     changeChosenPerson(value) {
       this.chosenPatientId = value.id;
