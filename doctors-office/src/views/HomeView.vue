@@ -63,7 +63,7 @@
                             <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>Pogodne cene</h5>
                         </div>
                     </div>
-                    <a href="appointment.html" class="btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">Pogledajte usluge</a>
+                    <a href="/services" class="btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">Pogledajte usluge</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">

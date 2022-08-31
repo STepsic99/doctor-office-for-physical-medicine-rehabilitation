@@ -85,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 								.antMatchers("/api/v1/auth/**").permitAll()
 								.antMatchers("/api/v1/services/*").permitAll()
 								.antMatchers("/api/v1/services").permitAll()
+								.antMatchers("/api/v1/medical-workers").permitAll()
 			// ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
 			// koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
 			// samo korisnik koji ima rolu 'ADMIN', navodimo na sledeci nacin: 
@@ -114,7 +115,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		 
 		// Ovim smo dozvolili pristup statickim resursima aplikacije
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
-				"/**/*.css", "/**/*.js", "api/v1/services/*","api/v1/services");
+				"/**/*.css", "/**/*.js", "api/v1/services/*","api/v1/services","/api/v1/medical-workers");
 	}
 
 }

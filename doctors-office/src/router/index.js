@@ -10,6 +10,7 @@ import DoctorCalendar from '../views/DoctorCalendar.vue'
 import TherapyCalendar from '../views/TherapyCalendar.vue'
 import PhysiotherapistCalendar from '../views/PhysiotherapistCalendar.vue'
 import ServicesView from '../views/ServicesView'
+import AboutView from '../views/AboutView'
 
 const routes = [
   {
@@ -25,11 +26,10 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    meta: { requiresAuth: true, role: "ROLE_DOCTOR" },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: AboutView
   },
   { path: '/login', name: 'Login', component: Login },
   {

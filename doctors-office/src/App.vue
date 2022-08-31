@@ -22,19 +22,9 @@
                 <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
                 <a href="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>
                 <a href="/services" v-if="!this.role" class="nav-item nav-link">Usluge</a>
-                <a href="service.html" v-if="!this.role" class="nav-item nav-link">O nama</a>
-                <div v-if="!this.role" class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="price.html" class="dropdown-item">Pricing Plan</a>
-                        <a href="team.html" class="dropdown-item">Our Dentist</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="appointment.html" class="dropdown-item">Appointment</a>
-                    </div>
-                </div>
+                <a href="/about" v-if="!this.role" class="nav-item nav-link">O nama</a>
                 <a href="contact.html" v-if="!this.role" class="nav-item nav-link">Kontakt</a>
             </div>
-            <button type="button" v-if="!this.role" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
             <a href="login" v-if="!this.role" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
             <a v-on:click="logout" v-if="this.role" class="btn btn-primary py-2 px-4 ms-3">Odjavite se</a>
         </div>
