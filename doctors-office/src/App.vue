@@ -13,19 +13,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="/" class="nav-item nav-link active">Naslovna</a>
-                <a href="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar pregleda</a>
-                <a href="/calendar-therapy" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar terapija</a>
-                <a href="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</a>
-                <a href="/physiotherapist/calendar" v-if="this.role==='ROLE_PHYSIOTHERAPIST'" class="nav-item nav-link">Kalendar termina</a>
-                <a href="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
-                <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
-                <a href="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>
-                <a href="/services" v-if="!this.role" class="nav-item nav-link">Usluge</a>
-                <a href="/about" v-if="!this.role" class="nav-item nav-link">O nama</a>
-                <a href="/contact" v-if="!this.role" class="nav-item nav-link">Kontakt</a>
+                <router-link to="/" class="nav-item nav-link">Naslovna</router-link>
+                <router-link to="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar pregleda</router-link>
+                <router-link to="/calendar-therapy" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar terapija</router-link>
+                <router-link to="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</router-link>
+                <router-link to="/physiotherapist/calendar" v-if="this.role==='ROLE_PHYSIOTHERAPIST'" class="nav-item nav-link">Kalendar termina</router-link>
+                <router-link to="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</router-link>
+                <router-link to="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</router-link>
+                <router-link to="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</router-link>
+                <router-link to="/services" v-if="!this.role" class="nav-item nav-link">Usluge</router-link>
+                <router-link to="/about" v-if="!this.role" class="nav-item nav-link">O nama</router-link>
+                <router-link to="/contact" v-if="!this.role" class="nav-item nav-link">Kontakt</router-link>
             </div>
-            <a href="login" v-if="!this.role" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</a>
+            <router-link to="login" v-if="!this.role" class="btn btn-primary py-2 px-4 ms-3">Prijavite se</router-link>
             <a v-on:click="logout" v-if="this.role" class="btn btn-primary py-2 px-4 ms-3">Odjavite se</a>
         </div>
     </nav>
