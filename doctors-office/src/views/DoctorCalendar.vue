@@ -1,8 +1,8 @@
 <template>
   <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
-    <div   class="row">
-      <div v-if="!startReport && !showAppointmentReport" class="col">
+    <div v-if="!startReport && !showAppointmentReport"  class="row">
+      <div class="col">
         <h1>Calendar</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
@@ -70,6 +70,7 @@
             </div>
           </div>
         </div>
+    </div>
     </div>
     <div v-else-if="startReport">
         <table width="100%" style="margin-left:5em;margin-right:5em">
@@ -159,7 +160,7 @@
     
 
 
- </div>
+ 
   </div>
 </template>
 
@@ -394,7 +395,8 @@ export default {
         axios
         .post("http://localhost:8180/api/v1/doctor-appointments/"+this.selectedAppointment.appID+"/report", this.report)
         .then((response) =>{
-              console.log(response.data)
+              console.log(response)
+              window.location.reload();
         })
         .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
     },

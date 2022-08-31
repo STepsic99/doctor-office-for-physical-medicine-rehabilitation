@@ -15,7 +15,7 @@
     </tbody>
   </table>
 
-    <div v-if="!personChosen" style="border: 1px solid;border-color:  #ced4da;padding:2em;width:60%">
+    <div v-if="!personChosen" style="border: 1px solid;border-color:  #ced4da;padding:2em;width:60%;margin-bottom:2em">
   <table width="100%" style="border-collapse:separate; border-spacing:1em 0">
     <tr>
       <td>
