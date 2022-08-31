@@ -35,7 +35,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                    <button type="button" class="btn btn-primary" v-on:click="showModal(this.selectedAppointment.patientId)">Istorija pregleda</button>
                 </td>
                 </tr>
 
@@ -159,7 +159,12 @@
       </div>
     
 
-
+   <PatientHistoryModal
+      v-show="isModalVisible"
+      @close="closeModal"
+      v-bind:renderCompHistory="renderCompHistory"
+      v-bind:pickedPatientId="pickedPatientId"
+    />
  
   </div>
 </template>
@@ -180,6 +185,7 @@ import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import PatientList from "@/components/PatientList.vue";
 import DiseaseList from "@/components/DiseaseList.vue"
 import Report from "@/components/Report.vue"
+import PatientHistoryModal from "@/components/PatientHistoryModal.vue";
 
 export default {
   name: "DoctorCalendar",
@@ -188,10 +194,14 @@ export default {
     Datepicker,
     PatientList,
     DiseaseList,
-    Report
+    Report,
+    PatientHistoryModal
   },
   data: function () {
     return {
+      pickedPatientId: 0,
+      isModalVisible: false,
+      renderCompHistory: false,
       terms: [],
 
       selectedEvent: {},
@@ -403,7 +413,17 @@ export default {
     startAppointment(){
       this.showSelectedAppointment = false;
       this.startReport = true;
-    }
+    },
+    showModal(patientId) {
+          this.pickedPatientId = patientId
+          this.renderCompHistory = true;
+          this.isModalVisible = true;
+       
+      },
+      closeModal() {
+        this.renderCompHistory = false;
+        this.isModalVisible = false;
+      }
   },
 };
 </script>
