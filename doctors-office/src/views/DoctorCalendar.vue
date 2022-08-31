@@ -1,14 +1,77 @@
 <template>
   <div style="margin-top: 60px"></div>
   <div class="container" style="margin-bottom: 30px">
-    <div class="row">
-      <div v-if="!showSelectedAppointment && !showAppointmentReport" class="col">
+    <div   class="row">
+      <div v-if="!startReport && !showAppointmentReport" class="col">
         <h1>Calendar</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>
 
-    <div v-else-if="showSelectedAppointment">
+              <div v-if="showSelectedAppointment" 
+    class="row d-flex justify-content-center"
+        style="margin-top: 30px">
+       
+               <div class="col-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 style="display: inline" class="card-title">
+                Započni pregled
+              </h4>
+              <span style="float:right">{{transformDate(this.selectedAppointment.start)}}</span>
+              <br />
+             <table style="width: 100%;border-collapse:separate; border-spacing:2em 2em;">
+            <tbody>
+            <tr>
+                <td style="vertical-align: top;text-align:left;padding-left:5em">
+                    <div>
+                    <img class="img-fluid  thumb" src="../assets/person.jpg" alt="">
+                </div>
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">{{this.selectedAppointment.patientFirstName}} {{this.selectedAppointment.patientLastName}}</h5>
+                <i class="fas fa-id-card" aria-hidden="true"></i> {{this.selectedAppointment.patientPersonalID}}
+                </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary">Istorija pregleda</button>
+                </td>
+                </tr>
+
+                    <tr>
+                         <td style="vertical-align: top;text-align:left;padding-left:5em">
+                           Usluge:  
+                         </td>
+                        <td style="vertical-align: top;text-align:left;">
+                            <div>                 
+                                <span  v-for="s in this.selectedAppointment.services" :key="s.id" class="badge bg-primary m-1">{{s.name}}</span>                         
+                            </div>
+                        </td>
+                    </tr>
+                <tr>
+                <td colspan="3" style="text-align:center;">
+                       <div>
+                <button
+              class="btn btn-danger"
+              v-on:click="goBack()"
+            >
+              Zatvori
+            </button>
+              <button class="btn btn-success" style="margin-left:2em" v-on:click="startAppointment()">
+                Započni pregled
+              </button>
+              </div>
+                </td>
+                </tr>
+            </tbody>
+            </table>
+             
+            </div>
+          </div>
+        </div>
+    </div>
+    <div v-else-if="startReport">
         <table width="100%" style="margin-left:5em;margin-right:5em">
             <tr>
                 <th style="text-align:left" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></th>
@@ -18,7 +81,7 @@
             </table>
       <div style="text-align:left;margin-top:5%;margin-bottom:5%;margin-left:5em;margin-right:5em">
         Ime i prezime: <b>{{selectedAppointment.patientFirstName}} {{selectedAppointment.patientLastName}}</b>  <span style="float:right">
-       Datum pregleda: {{transformDate(selectedEvent.start)}}
+       Datum pregleda: {{transformDate(selectedAppointment.start)}}
       </span>
       <br>
         JMBG: {{selectedAppointment.patientPersonalID}}
@@ -93,10 +156,10 @@
         <div style="text-align:left;margin-bottom:1em;" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></div>
         <Report />
       </div>
-    </div>
+    
 
 
-
+ </div>
   </div>
 </template>
 
@@ -189,7 +252,8 @@ export default {
         diagnoses: [],
         therapies: []
       },
-      showAppointmentReport:false
+      showAppointmentReport:false,
+      startReport: false
     };
   },
   mounted: function () {
@@ -279,20 +343,18 @@ export default {
          }
       });   
     },
-    closeSelectedReservation: function () {
-      this.selectedEvent = null;
-      this.showSelectedAppointment = false;
-    },
     changeChosenDiseases(value) {
       this.chosenDiseases = value;
       this.searchClosed = true;
     },
     transformDate(rawDate){
-        return rawDate.getDate()+"."+rawDate.getMonth()+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
+        rawDate = new Date(rawDate)
+        return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
     },
     goBack(){
         this.showSelectedAppointment = false;
         this.showAppointmentReport = false;
+        this.startReport = false;
     },
     openSearch(){
       this.searchClosed = false;
@@ -335,6 +397,10 @@ export default {
               console.log(response.data)
         })
         .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
+    },
+    startAppointment(){
+      this.showSelectedAppointment = false;
+      this.startReport = true;
     }
   },
 };
@@ -346,6 +412,16 @@ export default {
 .service-table, table.service-table  th, table.service-table td{
    border: 1px solid black;
   border-collapse: collapse;
+}
+
+.thumb {
+  
+    width: 80px;
+    height: 80px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 20%;
 }
 
 </style>
