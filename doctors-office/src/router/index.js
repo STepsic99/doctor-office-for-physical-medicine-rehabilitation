@@ -9,12 +9,18 @@ import PatientProfile from '../views/PatientProfile.vue'
 import DoctorCalendar from '../views/DoctorCalendar.vue'
 import TherapyCalendar from '../views/TherapyCalendar.vue'
 import PhysiotherapistCalendar from '../views/PhysiotherapistCalendar.vue'
+import ServicesView from '../views/ServicesView'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/services',
+    name: 'services',
+    component: ServicesView
   },
   {
     path: '/about',

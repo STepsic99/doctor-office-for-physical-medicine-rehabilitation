@@ -36,4 +36,16 @@ public class ServiceController {
         }
         return ResponseEntity.ok(responseDTOS);
     }
+	
+	@GetMapping
+	 public ResponseEntity<List<ServiceDTO>> findAll() {	
+		 	List<Service> services = serviceService.findAll();
+		 	List<ServiceDTO> responseDTOS = new ArrayList<>();
+	        for (Service service : services) {
+	        	ServiceDTO serviceDTO = new ServiceDTO(service);
+	            responseDTOS.add(serviceDTO);
+	        }
+	        return ResponseEntity.ok(responseDTOS);
+	        
+	   }
 }

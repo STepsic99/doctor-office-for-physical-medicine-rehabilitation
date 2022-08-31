@@ -23,4 +23,10 @@ public class ServiceServiceImpl implements ServiceService{
 		return serviceRepository.findAllByStaffType(staffType);
 	}
 
+
+	@Override
+	public List<com.doctorsoffice.model.Service> findAll() {
+		return serviceRepository.findAll();
+	}
+
 }

@@ -21,7 +21,7 @@
                 <a href="/patient-profiles" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Profili pacijenata</a>
                 <a href="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</a>
                 <a href="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</a>
-                <a href="about.html" v-if="!this.role" class="nav-item nav-link">Usluge</a>
+                <a href="/services" v-if="!this.role" class="nav-item nav-link">Usluge</a>
                 <a href="service.html" v-if="!this.role" class="nav-item nav-link">O nama</a>
                 <div v-if="!this.role" class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

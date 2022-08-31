@@ -7,4 +7,5 @@ import com.doctorsoffice.model.StaffType;
 
 public interface ServiceService {
 	List<Service> findAllByStaffType (StaffType staffType);
+	List<Service> findAll ();
 }
