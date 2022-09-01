@@ -386,6 +386,7 @@ export default {
         .put("http://localhost:8180/api/v1/physiotherapist-appointments/"+this.currentAppointment.appID, this.currentAppointment)
         .then((response) =>{
             console.log(response)
+            window.location.reload();
         }).catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
     },
     goBack(){

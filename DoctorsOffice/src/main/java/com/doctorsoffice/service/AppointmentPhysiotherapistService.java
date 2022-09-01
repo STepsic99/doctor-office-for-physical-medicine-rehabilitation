@@ -10,5 +10,6 @@ public interface AppointmentPhysiotherapistService {
 	List<AppointmentPhysiotherapist> findAll();
 	AppointmentPhysiotherapist findById(Long id);
 	AppointmentPhysiotherapist edit(Long id, PhysiotherapistAppointmentDTO dto);
+	void delete(Long id);
 	
 }

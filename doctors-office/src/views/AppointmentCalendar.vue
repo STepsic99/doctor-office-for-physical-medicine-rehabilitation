@@ -167,7 +167,7 @@
                 </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger">Otkaži pregled</button>
+                    <button type="button" class="btn btn-danger" v-on:click="cancelAppointment()">Otkaži pregled</button>
                 </td>
                 </tr>
 
@@ -452,6 +452,17 @@ export default {
     transformDate(rawDate){
         rawDate = new Date(rawDate)
         return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
+    },
+    cancelAppointment(){
+      axios.defaults.headers.common.Authorization =
+        "Bearer " + window.sessionStorage.getItem("jwt");
+        axios
+        .delete("http://localhost:8180/api/v1/doctor-appointments/"+this.currentAppointment.appID)
+        .then((response) =>{
+              console.log(response)
+              window.location.reload();
+        })
+        .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
     }
   },
 };

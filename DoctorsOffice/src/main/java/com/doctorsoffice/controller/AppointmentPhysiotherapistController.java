@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,5 +53,11 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 		 AppointmentPhysiotherapist appointment = appointmentPhysiotherapistService.edit(appointmentId, dto);		 	
 	      if(appointment!=null) return ResponseEntity.ok().build();
 	      return ResponseEntity.notFound().build();
+	   }
+	 
+	 @DeleteMapping(value = "{appointmentId}")
+	 public ResponseEntity<HttpStatus> delete(@PathVariable Long appointmentId) {	
+		    appointmentPhysiotherapistService.delete(appointmentId);		 	
+	        return ResponseEntity.noContent().build();     
 	   }
 }

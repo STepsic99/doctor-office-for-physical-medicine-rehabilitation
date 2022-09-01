@@ -13,7 +13,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <router-link to="/" class="nav-item nav-link">Naslovna</router-link>
+                <router-link to="/" v-if="!this.role" class="nav-item nav-link">Naslovna</router-link>
                 <router-link to="/calendar" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar pregleda</router-link>
                 <router-link to="/calendar-therapy" v-if="this.role==='ROLE_NURSE'" class="nav-item nav-link">Kalendar terapija</router-link>
                 <router-link to="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</router-link>

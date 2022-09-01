@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,5 +54,11 @@ private final AppointmentDoctorService appointmentDoctorService;
 	    public ResponseEntity<NewReportResponseDTO> create(@RequestBody NewReportRequestDTO dto,@PathVariable Long appointmentId) {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewReportResponseDTO(appointmentDoctorService.addReport(dto,appointmentId)));
 		}
+	 	
+	 	 @DeleteMapping(value = "{appointmentId}")
+		 public ResponseEntity<HttpStatus> delete(@PathVariable Long appointmentId) {	
+	 		 	appointmentDoctorService.delete(appointmentId);		 	
+		        return ResponseEntity.noContent().build();     
+		   }
 
 }

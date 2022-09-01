@@ -65,4 +65,9 @@ private final AppointmentDoctorRepository appointmentDoctorRepository;
 		return lastAppointment;
 	}
 
+	@Override
+	public void delete(Long id) {
+		appointmentDoctorRepository.deleteById(id);
+	}
+
 }

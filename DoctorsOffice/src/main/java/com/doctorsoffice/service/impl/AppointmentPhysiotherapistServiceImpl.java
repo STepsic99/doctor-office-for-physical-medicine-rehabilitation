@@ -41,4 +41,9 @@ private final AppointmentPhysiotherapistRepository appointmentPhysiotherapistRep
 		return appointmentPhysiotherapistRepository.save(currentAppointment);
 	}
 
+	@Override
+	public void delete(Long id) {
+		appointmentPhysiotherapistRepository.deleteById(id);
+	}
+
 }

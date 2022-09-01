@@ -11,4 +11,5 @@ public interface AppointmentDoctorService {
 	AppointmentDoctor findById(Long id);
 	AppointmentDoctor addReport(NewReportRequestDTO dto, Long appointmentId);
 	AppointmentDoctor findLastByPatientId(Long id);
+	void delete(Long id);
 }
