@@ -3,7 +3,7 @@
   <div class="container" style="margin-bottom: 30px">
     <div v-if="!showAppointmentReport" class="row">
       <div class="col">
-        <h1>Calendar</h1>
+        <h1>Kalendar pregleda</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>

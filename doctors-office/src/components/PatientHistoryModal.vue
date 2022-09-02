@@ -217,7 +217,7 @@ export default {
     return {
      isEditingProfile: false,
       selectedPatientCopy: {},
-      showMedicalHistory: false,
+      showMedicalHistory: true,
       appointments: [],
       isModalVisible: false,
       renderComp: false,

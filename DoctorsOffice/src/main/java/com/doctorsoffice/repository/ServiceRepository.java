@@ -10,4 +10,5 @@ import com.doctorsoffice.model.StaffType;
 public interface ServiceRepository extends JpaRepository<Service, Long>{
 	
 	List<Service> findAllByStaffType (StaffType staffType);
+	Service findByName(String name);
 }

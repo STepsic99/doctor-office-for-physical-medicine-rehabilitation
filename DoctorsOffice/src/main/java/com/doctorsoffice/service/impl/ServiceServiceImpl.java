@@ -29,4 +29,10 @@ public class ServiceServiceImpl implements ServiceService{
 		return serviceRepository.findAll();
 	}
 
+
+	@Override
+	public com.doctorsoffice.model.Service findByName(String name) {
+		return serviceRepository.findByName(name);
+	}
+
 }

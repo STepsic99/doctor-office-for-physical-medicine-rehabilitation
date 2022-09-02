@@ -14,14 +14,20 @@ import com.doctorsoffice.model.Report;
 import com.doctorsoffice.model.Therapy;
 import com.doctorsoffice.repository.AppointmentDoctorRepository;
 import com.doctorsoffice.service.AppointmentDoctorService;
+import com.doctorsoffice.service.ServiceService;
 
 @Service
 public class AppointmentDoctorServiceImpl implements AppointmentDoctorService{
 
-private final AppointmentDoctorRepository appointmentDoctorRepository;
+	private static final String EXAMINATION_NAME = "PREGLED";
 	
-	public AppointmentDoctorServiceImpl(AppointmentDoctorRepository appointmentDoctorRepository) {
+	private final AppointmentDoctorRepository appointmentDoctorRepository;
+	
+	private final ServiceService serviceService;
+	
+	public AppointmentDoctorServiceImpl(AppointmentDoctorRepository appointmentDoctorRepository,ServiceService serviceService) {
 		this.appointmentDoctorRepository = appointmentDoctorRepository;
+		this.serviceService = serviceService;
 	}
 	
 	@Override
@@ -51,16 +57,20 @@ private final AppointmentDoctorRepository appointmentDoctorRepository;
 	}
 
 	@Override
-	public AppointmentDoctor findLastByPatientId(Long id) {
+	public AppointmentDoctor findLastExaminationByPatientId(Long id) {
 		List<AppointmentDoctor> appointments = appointmentDoctorRepository.findAllByPatientId(id);
 		AppointmentDoctor lastAppointment = null;
 		for(int i = 0;i<appointments.size();i++) {
-			if(i==0) lastAppointment = appointments.get(i);
-			else {
-				if(lastAppointment.getEndTime().isBefore(appointments.get(i).getEndTime())) {
-					lastAppointment = appointments.get(i);
+			if(appointments.get(i).getServices().contains(serviceService.findByName(EXAMINATION_NAME))) {
+				
+				if(lastAppointment == null) lastAppointment = appointments.get(i);
+				else {
+					if(lastAppointment.getEndTime().isBefore(appointments.get(i).getEndTime())) {
+						lastAppointment = appointments.get(i);
+					}
 				}
-			}
+							
+			}		
 		}
 		return lastAppointment;
 	}

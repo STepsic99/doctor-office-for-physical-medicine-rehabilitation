@@ -106,7 +106,7 @@ public class PatientController {
 	 
 	 @GetMapping(value = "{patientId}/last-examination")
 	 public ResponseEntity<DoctorAppointmentDTO> findLastExaminationByPatientId(@PathVariable Long patientId) {	
-		 	AppointmentDoctor appointment = appointmentDoctorService.findLastByPatientId(patientId);
+		 	AppointmentDoctor appointment = appointmentDoctorService.findLastExaminationByPatientId(patientId);
 		 	if(appointment!=null) return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        return ResponseEntity.notFound().build();
 	        
