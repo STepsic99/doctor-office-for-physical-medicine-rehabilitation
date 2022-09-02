@@ -4,9 +4,34 @@
     
 
     <div class="container">
+
+      <div style="text-align:left;margin-bottom: 30px">
+
+      <div
+              style=" float:left;margin-bottom:0"
+              class="form-check form-switch"
+            >
+              <input
+                v-model="showMedicalHistory"
+                class="form-check-input"
+                type="checkbox"
+              />
+            </div>
+            <br />
+            <div
+              style=" font-style: italic; zoom: 0.8; text-align:left;margin-top:0.5em"
+              v-if="showMedicalHistory"
+            >
+              Medicinska istorija
+            </div>
+            <div style=" font-style: italic; zoom: 0.8;text-align:left;margin-top:0.5em" v-else>
+              Lični podaci
+            </div>
+
+     </div>
      
         <div class="row justify-content-between">
-          <div class="col-6">
+          <div v-if="!showMedicalHistory" class="col-6">
             <div class="card">
               <div class="card-body">
                 <label class="form-label">Ime</label>
@@ -115,16 +140,78 @@
             <br />
             <br />
             <br />
-       
-
-            
+              
           </div>
+
+        <div v-else class="col-6">
+          <div class="card">
+                <div class="card-body">
+               <table width="100%" style="border-collapse:separate; border-spacing:0 2em;">
+                <tr>
+                  <th>Usluga</th>
+                  <th>Datum</th>
+                  <th>Prisutnost</th>
+                  <th>Dokumentacija</th>
+                </tr>
+                <tr v-for="a in appointments" :key="a.id">
+                  <td>
+                    <span v-for="service in a.services" :key="service.id" class="badge bg-primary m-1">
+                     {{service.name}}
+                      </span>
+                    </td>
+                    <td>
+                      {{transformDate(a.start)}}
+                    </td>
+                   
+                      <td v-if="a.type=='PHYSIOTHERAPIST'">
+                        <span>
+                        <i v-if="a.patientPresent=='UNSET'" class="fa fa-question"></i>
+                        <i v-else-if="a.patientPresent=='PRESENT'" class="fa fa-check" aria-hidden="true" style="color:green;"></i>
+                        <i v-else-if="a.patientPresent=='ABSENT'" class="fa fa-times" aria-hidden="true" style="color:red;"></i>
+                        </span>
+                        </td>
+                      <td v-if="a.type=='PHYSIOTHERAPIST'">
+                        <span v-if="a.note" style="color:#0d6efd;text-decoration: underline;cursor:pointer" v-on:click="showModalTherapy(a)">
+                        Vidi komentar
+                        </span>
+                      </td>
+                   
+                    
+                      <td v-if="a.type=='DOCTOR'">
+                        <span>
+                        <i v-if="presenceAtExamination(a)=='UNSET'" class="fa fa-question"></i>
+                        <i v-else-if="presenceAtExamination(a)=='PRESENT'" class="fa fa-check" aria-hidden="true" style="color:green;"></i>
+                        <i v-else-if="presenceAtExamination(a)=='ABSENT'" class="fa fa-times" aria-hidden="true" style="color:red;"></i>
+                        </span>
+                      </td>
+                      <td v-if="a.type=='DOCTOR'">
+                        <span v-if="a.report" style="color:#0d6efd;text-decoration: underline;cursor:pointer" v-on:click="showModal(a)">
+                        Vidi izveštaj
+                        </span>
+                      </td>    
+                  </tr>
+               </table>
+              </div>
+          </div>
+        </div>
+
           <div class="col-4" style="padding-top:5%">
             <img src="../assets/person.jpg" class="img-fluid" />
            
           </div>
         </div>
     </div>
+
+     <ReportModal
+      v-show="isModalVisible"
+      @close="closeModal"
+      v-bind:renderComp="renderComp"
+    />
+    <CommentModal
+      v-show="isModalVisibleTherapy"
+      @close="closeModalTherapy"
+      v-bind:renderComp="renderCompTherapy"
+    />
   </div>
 </template>
 
@@ -136,13 +223,15 @@ import "vue3-date-time-picker/dist/main.css";
 
 import "@fullcalendar/core/vdom"; 
 
-import PatientList from "@/components/PatientList.vue";
 import shared from '@/shared';
+import ReportModal from "@/components/ReportModal.vue";
+import CommentModal from "@/components/CommentModal.vue";
 
 export default {
   name: "PatientProfile",
   components: {
-    PatientList,
+    ReportModal,
+    CommentModal
   },
   data: function () {
     return {
@@ -154,7 +243,13 @@ export default {
             oldPassword: '',
             newPassword: ''
         },
-      newPasswordRepeated: ''
+      newPasswordRepeated: '',
+      showMedicalHistory: false,
+        isModalVisible: false,
+      renderComp: false,
+      isModalVisibleTherapy: false,
+      renderCompTherapy: false,
+      appointments: []
     };
   },
   mounted: function () {
@@ -167,6 +262,19 @@ export default {
         })
         .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
   },
+  watch: {
+    showMedicalHistory: function (val) {
+      if(!val) return;
+      axios.defaults.headers.common.Authorization =
+      "Bearer " + window.sessionStorage.getItem("jwt");
+      axios
+      .get("http://localhost:8180/api/v1/patients/"+this.selectedPatient.id+"/appointments/medical-documentation")
+      .then((response) =>{
+            this.appointments = response.data;
+      })
+      .catch(err => {alert("Neuspešna operacija. Kod greške: "+err.response.status)});
+    }
+    },
   methods: {
     editPassword: function(){
           this.isEditingPassword = true;
@@ -198,7 +306,38 @@ export default {
       },
       newPassEqual: function(){
           return this.passwordData.newPassword === this.newPasswordRepeated;
-      }
+      },
+      transformDate(rawDate){
+        rawDate = new Date(rawDate)
+        return rawDate.getDate()+"."+(rawDate.getMonth()+1)+"."+rawDate.getFullYear()+"."+" "+rawDate.getHours()+":"+(rawDate.getMinutes()<10?'0':'') +rawDate.getMinutes()
+    },
+    presenceAtExamination(app){
+        if(app.report) return 'PRESENT'
+        else {
+          if(app.end < (new Date())) return 'ABSENT'
+          return 'UNSET'
+        }
+    },
+    showModal(app) {
+        this.$store.commit("change", app);
+        this.renderComp = true;
+        this.isModalVisible = true;
+      
+    },
+    closeModal() {
+      this.renderComp = false;
+      this.isModalVisible = false;
+    },
+    showModalTherapy(app) {
+        this.$store.commit("change", app);
+        this.renderCompTherapy = true;
+        this.isModalVisibleTherapy = true;
+      
+    },
+    closeModalTherapy() {
+      this.renderCompTherapy = false;
+      this.isModalVisibleTherapy = false;
+    }
   },
 };
 </script>

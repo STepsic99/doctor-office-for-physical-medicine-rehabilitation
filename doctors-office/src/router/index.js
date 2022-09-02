@@ -39,43 +39,43 @@ const routes = [
     path: '/calendar',
     name: 'appointmentCalendar',
     component: AppointmentCalendar,
-    meta: { requiresAuth: true, role: "ROLE_NURSE" },
+    meta: { requiresAuth: true, roles: ["ROLE_NURSE"] },
   },
   {
     path: '/patient/calendar',
     name: 'patientCalendar',
     component: PatientCalendar,
-    meta: { requiresAuth: true, role: "ROLE_PATIENT" },
+    meta: { requiresAuth: true, roles: ["ROLE_PATIENT"] },
   },
   {
     path: '/patient-profiles',
     name: 'PatientsProfiles',
     component: PatientsProfiles,
-    meta: { requiresAuth: true, role: "ROLE_NURSE" },
+    meta: { requiresAuth: true, roles: ["ROLE_NURSE","ROLE_DOCTOR","ROLE_PHYSIOTHERAPIST"] },
   },
   {
     path: '/patient/profile',
     name: 'patientProfile',
     component: PatientProfile,
-    meta: { requiresAuth: true, role: "ROLE_PATIENT" },
+    meta: { requiresAuth: true, roles: ["ROLE_PATIENT"] },
   },
   {
     path: '/doctor/calendar',
     name: 'doctorCalendar',
     component: DoctorCalendar,
-    meta: { requiresAuth: true, role: "ROLE_DOCTOR" },
+    meta: { requiresAuth: true, roles: ["ROLE_DOCTOR"] },
   },
   {
     path: '/calendar-therapy',
     name: 'therapyCalendar',
     component: TherapyCalendar,
-    meta: { requiresAuth: true, role: "ROLE_NURSE" },
+    meta: { requiresAuth: true, roles: ["ROLE_NURSE"] },
   },
   {
     path: '/physiotherapist/calendar',
     name: 'physiotherapistCalendar',
     component: PhysiotherapistCalendar,
-    meta: { requiresAuth: true, role: "ROLE_PHYSIOTHERAPIST" },
+    meta: { requiresAuth: true, roles: ["ROLE_PHYSIOTHERAPIST"] },
   }
 ]
 
@@ -89,7 +89,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   // instead of having to check every route record with
   // to.matched.some(record => record.meta.requiresAuth)
-  if (to.meta.requiresAuth && shared.getRoleFromToken()!==to.meta.role) {
+  if (to.meta.requiresAuth && !to.meta.roles.includes(shared.getRoleFromToken())) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     return {

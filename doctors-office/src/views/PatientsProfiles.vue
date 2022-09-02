@@ -86,7 +86,7 @@
 
                 <div class="d-flex justify-content-center">
                   <button
-                    v-if="!isEditingProfile"
+                    v-if="!isEditingProfile  && isNurse()"
                     v-on:click="editProfile()"
                     class="btn btn-primary m-1"
                   >
@@ -287,6 +287,10 @@ export default {
       closeModalTherapy() {
         this.renderCompTherapy = false;
         this.isModalVisibleTherapy = false;
+      },
+      isNurse(){
+            if(shared.getRoleFromToken()==='ROLE_NURSE') return true;
+            return false;
       }
   },
 };
