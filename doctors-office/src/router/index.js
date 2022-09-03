@@ -12,6 +12,7 @@ import PhysiotherapistCalendar from '../views/PhysiotherapistCalendar.vue'
 import ServicesView from '../views/ServicesView'
 import AboutView from '../views/AboutView'
 import ContactView from '../views/ContactView'
+import PatientExaminationCreationView from '../views/PatientExaminationCreationView'
 
 const routes = [
   {
@@ -76,7 +77,13 @@ const routes = [
     name: 'physiotherapistCalendar',
     component: PhysiotherapistCalendar,
     meta: { requiresAuth: true, roles: ["ROLE_PHYSIOTHERAPIST"] },
-  }
+  },
+  {
+    path: '/patient/examination-creation',
+    name: 'patientExaminationCreation',
+    component: PatientExaminationCreationView,
+    meta: { requiresAuth: true, roles: ["ROLE_PATIENT"] },
+  },
 ]
 
 const router = createRouter({

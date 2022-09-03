@@ -261,6 +261,16 @@ export default {
         slotMinTime: "08:00:00",
         slotMaxTime: "16:00:00",
         contentHeight: "auto",
+        nowIndicator: true,
+         locale: "sr-ME",
+        buttonText:{
+                    today:    'Danas',
+                    month:    'Mesec',
+                    week:     'Nedelja',
+                    day:      'Dan',
+                    list:     'list'
+                  },
+        allDaySlot: false
       },
       oldPatient: true,
       services: [],

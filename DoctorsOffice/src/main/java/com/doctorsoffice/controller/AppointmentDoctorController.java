@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorsoffice.dto.AppointmentTermDTO;
 import com.doctorsoffice.dto.DoctorAppointmentDTO;
+import com.doctorsoffice.dto.NewAppointmentsRequestDTO;
+import com.doctorsoffice.dto.NewAppointmentsResponseDTO;
+import com.doctorsoffice.dto.NewExaminationRequestDTO;
+import com.doctorsoffice.dto.NewExaminationResponseDTO;
 import com.doctorsoffice.dto.NewReportRequestDTO;
 import com.doctorsoffice.dto.NewReportResponseDTO;
 import com.doctorsoffice.model.AppointmentDoctor;
+import com.doctorsoffice.model.User;
 import com.doctorsoffice.service.AppointmentDoctorService;
 
 @RestController
@@ -60,5 +67,12 @@ private final AppointmentDoctorService appointmentDoctorService;
 	 		 	appointmentDoctorService.delete(appointmentId);		 	
 		        return ResponseEntity.noContent().build();     
 		   }
+	 	 
+	 	@PostMapping(value = "examination")
+	    public ResponseEntity<NewExaminationResponseDTO> create(@RequestBody NewExaminationRequestDTO dto, Authentication authentication) {
+	 		UserDetails detUser = (UserDetails)authentication.getPrincipal();
+			User user = (User) detUser;
+	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewExaminationResponseDTO(appointmentDoctorService.addExaminationByPatient(dto, user.getId())));
+		}
 
 }

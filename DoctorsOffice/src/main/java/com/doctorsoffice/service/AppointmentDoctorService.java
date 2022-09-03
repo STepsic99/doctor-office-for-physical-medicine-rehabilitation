@@ -2,6 +2,7 @@ package com.doctorsoffice.service;
 
 import java.util.List;
 
+import com.doctorsoffice.dto.NewExaminationRequestDTO;
 import com.doctorsoffice.dto.NewReportRequestDTO;
 import com.doctorsoffice.model.AppointmentDoctor;
 
@@ -12,4 +13,5 @@ public interface AppointmentDoctorService {
 	AppointmentDoctor addReport(NewReportRequestDTO dto, Long appointmentId);
 	AppointmentDoctor findLastExaminationByPatientId(Long id);
 	void delete(Long id);
+	AppointmentDoctor addExaminationByPatient(NewExaminationRequestDTO dto, Long patientId);
 }

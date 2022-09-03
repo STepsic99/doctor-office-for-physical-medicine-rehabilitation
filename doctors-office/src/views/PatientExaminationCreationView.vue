@@ -3,8 +3,8 @@
   <div class="container" style="margin-bottom: 30px">
     <div v-if="!showAppointmentReport" class="row">
       <div class="col">
-        <h1>Kalendar pregleda</h1>
-        <FullCalendar :options="calendarOptions" />
+        <h1>Kalendar</h1>
+        <FullCalendar :options="calendarOptions"/>
         <br />
       </div>
     
@@ -29,97 +29,29 @@
           <div class="card-body">
             <h4 style="display: inline" class="card-title">
               Kreirajte novi pregled
-            </h4>
-            <span
-              style="display: inline; float: right"
-              class="form-check form-switch"
-            >
-              <input
-                v-model="oldPatient"
-                class="form-check-input"
-                type="checkbox"
-              />
-            </span>
-            <br />
-            <div
-              style="float: right; font-style: italic; zoom: 0.8"
-              v-if="oldPatient"
-            >
-              Postojeći pacijent
-            </div>
-            <div style="float: right; font-style: italic; zoom: 0.8" v-else>
-              Novi pacijent
-            </div>
-            <br />
-            <span style="margin-top: 1.33em" class="row">
-              <div class="col-5">
-                <Datepicker
+            </h4>          
+              
+              <table width="100%" style="margin-top: 2.66em;border-collapse:separate; border-spacing:5em 0;">
+                <tr>
+                  <td>
+                       <Datepicker
                   v-on:click="showcreateNewAppointmentForm()"
                   v-model="createNewAppointment.date"
                   range
                 ></Datepicker>
-                <select
-                  class="form-select"
+                  </td>
+                  <td>
+                      <input
+                  disabled
                   v-model="createNewAppointment.type"
-                  style="margin-top: 30px"
-                >
-                  <option
-                    v-for="option in services"
-                    :key="option.id"
-                    :value="option"
-                  >
-                    {{ option.name }}
-                  </option>
-                </select>
-              </div>
-              <div style="padding-left: 5%" class="col-6">
-                <PatientList
-                  :existingPatient="oldPatient"
-                  @chosenPerson="changeChosenPerson"
+                  type="text"
+                  class="form-control"
+                  style="float:right"
                 />
-                <div v-if="!oldPatient">
-                  <form class="row d-flex justify-content-between">
-                    <div class="col-6">
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="newPatient.firstName"
-                        placeholder="Ime"
-                      />
-                    </div>
-                    <div class="col-6">
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="newPatient.lastName"
-                        placeholder="Prezime"
-                      />
-                    </div>
-                  </form>
-                  <form
-                    style="margin-top: 1.8em"
-                    class="row d-flex justify-content-between"
-                  >
-                    <div class="col-6">
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="newPatient.phoneNumber"
-                        placeholder="Broj telefona"
-                      />
-                    </div>
-                    <div class="col-6">
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="newPatient.personalID"
-                        placeholder="JMBG (opciono)"
-                      />
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </span>
+                  </td>
+                  </tr>
+              </table>
+               
             <br />
             <p class="card-text text-danger">{{ createNewAppointment.msg }}</p>
             <button
@@ -140,74 +72,9 @@
       </div>
     </div>
 
-        <div v-else-if="showAppointment" 
-    class="row d-flex justify-content-center"
-        style="margin-top: 30px">
-       
-               <div class="col-10">
-          <div class="card">
-            <div class="card-body">
-              <h4 style="display: inline" class="card-title">
-                O terminu
-              </h4>
-              <span style="float:right">{{transformDate(this.currentAppointment.start)}}</span>
-              <br />
-             <table style="width: 100%;border-collapse:separate; border-spacing:2em 2em;">
-            <tbody>
-            <tr>
-                <td style="vertical-align: top;text-align:left;padding-left:5em">
-                    <div>
-                    <img class="img-fluid  thumb" src="../assets/person.jpg" alt="">
-                </div>
-                </td>
-                <td style="text-align:left;">
-                    <div>
-                <h5 class="mb-0" style="color:#0d6efd;margin-bottom:1em">{{this.currentAppointment.patientFirstName}} {{this.currentAppointment.patientLastName}}</h5>
-                <i class="fas fa-id-card" aria-hidden="true"></i> {{this.currentAppointment.patientPersonalID}}
-                </div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger" v-on:click="cancelAppointment()">Otkaži pregled</button>
-                </td>
-                </tr>
-
-                    <tr>
-                         <td style="vertical-align: top;text-align:left;padding-left:5em">
-                           Usluge:  
-                         </td>
-                        <td style="vertical-align: top;text-align:left;">
-                            <div>                 
-                                <span  v-for="s in this.currentAppointment.services" :key="s.id" class="badge bg-primary m-1">{{s.name}}</span>                         
-                            </div>
-                        </td>
-                    </tr>
-                <tr>
-                <td></td>
-                <td style="text-align:left;padding-top:2em">
-                       <div>
-                <button
-              class="btn btn-primary"
-              v-on:click="goBack()"
-            >
-              Zatvori
-            </button>
-              </div>
-                </td>
-                <td></td>
-                </tr>
-            </tbody>
-            </table>
-             
-            </div>
-          </div>
-        </div>
-    </div>
 
     </div>
-    <div v-else-if="showAppointmentReport">
-        <div style="text-align:left;margin-bottom:1em;" width="25%"><i class="fa fa-arrow-left" aria-hidden="true" style="color:red;cursor:pointer;zoom:1.5" v-on:click="goBack()"></i></div>
-        <Report />
-      </div>
+
   </div>
 </template>
 
@@ -227,7 +94,7 @@ import PatientList from "@/components/PatientList.vue";
 import Report from "@/components/Report.vue";
 
 export default {
-  name: "AppointmentCalendar",
+  name: "PatientExaminationCreationView",
   components: {
     FullCalendar,
     Datepicker,
@@ -244,7 +111,7 @@ export default {
       createNewAppointment: {
         date: [],
         formVisible: false,
-        type: {},
+        type: "PREGLED",
         msg: "",
         valid: true,
       },
@@ -276,7 +143,10 @@ export default {
         slotMaxTime: "16:00:00",
         contentHeight: "auto",
         nowIndicator: true,
-         locale: "sr-ME",
+        slotDuration: "01:00:00",
+        displayEventTime: false,
+        selectOverlap: false,
+        locale: "sr-ME",
         buttonText:{
                     today:    'Danas',
                     month:    'Mesec',
@@ -322,12 +192,14 @@ export default {
           console.log(a);
           a.display = "auto";
           a.textColor = "white";
-          a.backgroundColor = "#0DE6FD";
-          a.borderColor = "#0DE6FD";
+          a.backgroundColor = "#dc3545";
+          a.borderColor = "#dc3545";
           a.description = "opis";
           a.editable = false;
           a.overlap = false;
-          a.title = a.services;
+    
+          if(new Date(a.start).getMinutes() != 0) a.start= (new Date(a.start)).setMinutes(0)
+          if(new Date(a.end).getMinutes() != 0) a.end= (new Date(a.end)).setMinutes(59)
           this.calendarOptions.events.push(a);
         }
       });
@@ -353,31 +225,17 @@ export default {
         this.createNewAppointment.valid = false;
       }
     },
-    addNewAppointment: async function () {
-      if (!this.oldPatient) {
-        axios.defaults.headers.common.Authorization =
-          "Bearer " + window.sessionStorage.getItem("jwt");
-        const response = await axios.post(
-          "http://localhost:8180/api/v1/patients",
-          this.newPatient
-        );
-
-        if (!response.data) {
-          return;
-        }
-
-        this.chosenPatientId = response.data.id;
-      }
+    addNewAppointment: function () {
+      
 
       const pickedServices = [];
       pickedServices.push(this.createNewAppointment.type);
       axios.defaults.headers.common.Authorization =
         "Bearer " + window.sessionStorage.getItem("jwt");
       axios
-        .post("http://localhost:8180/api/v1/appointments", {
-          patientID: this.chosenPatientId,
+        .post("http://localhost:8180/api/v1/doctor-appointments/examination", {
            medicalWorkerID: 1,
-           appointments: [{startTime: new Date(
+           startTime: new Date(
             Date.UTC(
               this.createNewAppointment.date[0].getFullYear(),
               this.createNewAppointment.date[0].getMonth(),
@@ -396,8 +254,7 @@ export default {
               this.createNewAppointment.date[1].getMinutes(),
               this.createNewAppointment.date[1].getSeconds()
             )
-          ),
-          services: pickedServices}]     
+          )  
         })
         .then((response) => {
           console.log(response.data);

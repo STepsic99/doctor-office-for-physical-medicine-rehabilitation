@@ -7,13 +7,17 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.doctorsoffice.dto.NewExaminationRequestDTO;
 import com.doctorsoffice.dto.NewReportRequestDTO;
 import com.doctorsoffice.dto.NewTherapyDTO;
 import com.doctorsoffice.model.AppointmentDoctor;
+import com.doctorsoffice.model.MedicalWorker;
 import com.doctorsoffice.model.Report;
 import com.doctorsoffice.model.Therapy;
 import com.doctorsoffice.repository.AppointmentDoctorRepository;
 import com.doctorsoffice.service.AppointmentDoctorService;
+import com.doctorsoffice.service.MedicalWorkerService;
+import com.doctorsoffice.service.PatientService;
 import com.doctorsoffice.service.ServiceService;
 
 @Service
@@ -25,9 +29,15 @@ public class AppointmentDoctorServiceImpl implements AppointmentDoctorService{
 	
 	private final ServiceService serviceService;
 	
-	public AppointmentDoctorServiceImpl(AppointmentDoctorRepository appointmentDoctorRepository,ServiceService serviceService) {
+	private final PatientService patientService;
+	
+	private final MedicalWorkerService medicalWorkerService;
+	
+	public AppointmentDoctorServiceImpl(AppointmentDoctorRepository appointmentDoctorRepository,ServiceService serviceService,PatientService patientService,MedicalWorkerService medicalWorkerService) {
 		this.appointmentDoctorRepository = appointmentDoctorRepository;
 		this.serviceService = serviceService;
+		this.patientService = patientService;
+		this.medicalWorkerService = medicalWorkerService;
 	}
 	
 	@Override
@@ -78,6 +88,15 @@ public class AppointmentDoctorServiceImpl implements AppointmentDoctorService{
 	@Override
 	public void delete(Long id) {
 		appointmentDoctorRepository.deleteById(id);
+	}
+
+	@Override
+	public AppointmentDoctor addExaminationByPatient(NewExaminationRequestDTO dto, Long patientId) {
+		MedicalWorker medicalWorker = medicalWorkerService.findById(dto.getMedicalWorkerID());
+		HashSet<com.doctorsoffice.model.Service> services = new HashSet<com.doctorsoffice.model.Service>();
+		services.add(serviceService.findByName(EXAMINATION_NAME));
+		AppointmentDoctor appointment = new AppointmentDoctor(patientService.findById(patientId),services,medicalWorker,dto.getStartTime(),dto.getEndTime());	
+		return appointmentDoctorRepository.save(appointment);
 	}
 
 }

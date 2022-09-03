@@ -3,7 +3,7 @@
   <div class="container" style="margin-bottom: 30px">
     <div v-if="!startReport && !showAppointmentReport"  class="row">
       <div class="col">
-        <h1>Calendar</h1>
+        <h1>Kalendar</h1>
         <FullCalendar :options="calendarOptions" />
         <br />
       </div>
@@ -240,7 +240,17 @@ export default {
         ],
         slotMinTime: "08:00:00",
         slotMaxTime: "16:00:00",
-        contentHeight: 'auto'
+        contentHeight: 'auto',
+        nowIndicator: true,
+         locale: "sr-ME",
+        buttonText:{
+                    today:    'Danas',
+                    month:    'Mesec',
+                    week:     'Nedelja',
+                    day:      'Dan',
+                    list:     'list'
+                  },
+        allDaySlot: false
       },
       oldPatient: true,
       services: [],

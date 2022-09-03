@@ -19,6 +19,7 @@
                 <router-link to="/doctor/calendar" v-if="this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Kalendar termina</router-link>
                 <router-link to="/physiotherapist/calendar" v-if="this.role==='ROLE_PHYSIOTHERAPIST'" class="nav-item nav-link">Kalendar termina</router-link>
                 <router-link to="/patient-profiles" v-if="this.role==='ROLE_NURSE' || this.role==='ROLE_PHYSIOTHERAPIST' || this.role==='ROLE_DOCTOR'" class="nav-item nav-link">Profili pacijenata</router-link>
+                <router-link to="/patient/examination-creation" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Zakaži pregled</router-link>
                 <router-link to="/patient/calendar" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Moj kalendar</router-link>
                 <router-link to="/patient/profile" v-if="this.role==='ROLE_PATIENT'" class="nav-item nav-link">Profil</router-link>
                 <router-link to="/services" v-if="!this.role" class="nav-item nav-link">Usluge</router-link>
