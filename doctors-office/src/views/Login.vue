@@ -1,11 +1,10 @@
 <template>
   <div style="height: 100px"></div>
-
   <div class="container">
     <div class="row align-items-center justify-content-between">
       <div class="col p-5 align-items-center">
         <div style="width: 50%">
-          <label class="form-label">Email</label>
+          <label class="form-label">Korisničko ime</label>
           <input
             v-model="loginData.username"
             type="text"
