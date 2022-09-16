@@ -51,8 +51,8 @@
                         <h5 class="position-relative d-inline-block text-primary text-uppercase">O nama</h5>
                         <h1 class="display-5 mb-0">Rumska najbolja fizijatrijska ordinacija</h1>
                     </div>
-                    <h4 class="text-body fst-italic mb-4">Diam dolor diam ipsum sit. Clita erat ipsum et lorem stet no lorem sit clita duo justo magna dolore</h4>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor eirmod magna dolore erat amet</p>
+                    <h4 class="text-body fst-italic mb-4">“Relax” je privatna fizijatrijska ordinacija u Rumi. Vršimo specijalističke preglede dece i odraslih osoba.</h4>
+                    <p class="mb-4">Cilj ordinacije je da se pruži maksimalna pažnja svakom pacijentu uz visoku stručnost. Pregledi i terapije se odvijaju u prijateljskoj atmosferi. Zaposleni su i više nego raspoloženi da pruže sve informacije pacijentu koje ga interesuju vezano za njegovo stanje i dalji tok lečenja.</p>
                     <div class="row g-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.3s">
                             

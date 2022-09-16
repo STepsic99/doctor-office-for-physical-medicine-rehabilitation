@@ -100,7 +100,7 @@ router.beforeEach((to, from) => {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     return {
-      path: '/login'
+      path: '/'
     }
   }
 })
