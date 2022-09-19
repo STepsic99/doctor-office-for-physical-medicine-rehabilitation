@@ -81,16 +81,125 @@ VALUES (11,'KINEZITERAPIJA', 1500, 'PHYSIOTHERAPIST');
 INSERT INTO permission(id, name)
 VALUES (1, 'CHANGE_PASSWORD_PERMISSION');
 
+INSERT INTO permission(id, name)
+VALUES (2, 'CREATE_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (3, 'FIND_DOCTOR_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (4, 'CREATE_REPORT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (5, 'CANCEL_DOCTOR_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (6, 'CREATE_DOCTOR_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (7, 'FIND_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (8, 'EDIT_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (9, 'CANCEL_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (10, 'FIND_DISEASE_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (11, 'FIND_PATIENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (12, 'CREATE_PATIENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (13, 'FIND_PATIENT_APPOINTMENTS');
+
+INSERT INTO permission(id, name)
+VALUES (14, 'UPDATE_PATIENT_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (15, 'GET_PATIENT_INFO_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (16, 'GET_PATIENT_LAST_EXAMINATION_PERMISSION');
+
+INSERT INTO permission(id, name)
+VALUES (17, 'GET_PATIENT_MEDICAL_DOCUMENTATION_PERMISSION');
+
 
 --ROLES_PERMISSIONS
 INSERT INTO roles_permissions(role_id, permission_id)
-VALUES (1, 1);
-INSERT INTO roles_permissions(role_id, permission_id)
-VALUES (2, 1);
-INSERT INTO roles_permissions(role_id, permission_id)
-VALUES (3, 1);
-INSERT INTO roles_permissions(role_id, permission_id)
 VALUES (4, 1);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 2);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 3);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 3);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 3);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 3);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 4);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 5);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 6);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 7);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 7);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 7);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 7);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 8);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 9);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 10);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 11);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 11);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 11);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 12);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 13);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 13);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 13);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 13);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 14);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 15);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 15);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 15);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 15);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 16);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (1, 17);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (2, 17);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (3, 17);
+INSERT INTO roles_permissions(role_id, permission_id)
+VALUES (4, 17);
+
 
 
 --DISEASES

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +40,7 @@ private final AppointmentDoctorService appointmentDoctorService;
 		this.appointmentDoctorService = appointmentDoctorService;
 	}
 	
+	@PreAuthorize("hasAuthority('FIND_DOCTOR_APPOINTMENT_PERMISSION')")
 	@GetMapping
 	 public ResponseEntity<List<AppointmentTermDTO>> findAll() {	
 		 	List<AppointmentDoctor> appointments = appointmentDoctorService.findAll();
@@ -50,24 +52,28 @@ private final AppointmentDoctorService appointmentDoctorService;
 	        
 	   }
 	
+	@PreAuthorize("hasAuthority('FIND_DOCTOR_APPOINTMENT_PERMISSION')")
 	@GetMapping(value = "{appointmentId}")
 	 public ResponseEntity<DoctorAppointmentDTO> find(@PathVariable Long appointmentId) {	
 		 	AppointmentDoctor appointment = appointmentDoctorService.findById(appointmentId);		 	
 	        return ResponseEntity.ok(new DoctorAppointmentDTO(appointment));
 	        
 	   }
-	
+		
+		@PreAuthorize("hasAuthority('CREATE_REPORT_PERMISSION')")
 	 	@PostMapping(value = "{appointmentId}/report")
 	    public ResponseEntity<NewReportResponseDTO> create(@RequestBody NewReportRequestDTO dto,@PathVariable Long appointmentId) {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewReportResponseDTO(appointmentDoctorService.addReport(dto,appointmentId)));
 		}
 	 	
+		 @PreAuthorize("hasAuthority('CANCEL_DOCTOR_APPOINTMENT_PERMISSION')")
 	 	 @DeleteMapping(value = "{appointmentId}")
 		 public ResponseEntity<HttpStatus> delete(@PathVariable Long appointmentId) {	
 	 		 	appointmentDoctorService.delete(appointmentId);		 	
 		        return ResponseEntity.noContent().build();     
 		   }
 	 	 
+		@PreAuthorize("hasAuthority('CREATE_DOCTOR_APPOINTMENT_PERMISSION')") 
 	 	@PostMapping(value = "examination")
 	    public ResponseEntity<NewExaminationResponseDTO> create(@RequestBody NewExaminationRequestDTO dto, Authentication authentication) {
 	 		UserDetails detUser = (UserDetails)authentication.getPrincipal();

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 		this.appointmentPhysiotherapistService = appointmentPhysiotherapistService;
 	}
 	
+	 @PreAuthorize("hasAuthority('FIND_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION')")
 	 @GetMapping
 	 public ResponseEntity<List<AppointmentTermDTO>> findAll() {	
 		 	List<AppointmentPhysiotherapist> appointments = appointmentPhysiotherapistService.findAll();
@@ -41,6 +43,7 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('FIND_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION')")
 	 @GetMapping(value = "{appointmentId}")
 	 public ResponseEntity<PhysiotherapistAppointmentDTO> find(@PathVariable Long appointmentId) {	
 		 AppointmentPhysiotherapist appointment = appointmentPhysiotherapistService.findById(appointmentId);		 	
@@ -48,6 +51,7 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('EDIT_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION')")
 	 @PutMapping(value = "{appointmentId}")
 	 public ResponseEntity<HttpStatus> edit(@PathVariable Long appointmentId, @RequestBody PhysiotherapistAppointmentDTO dto) {	
 		 AppointmentPhysiotherapist appointment = appointmentPhysiotherapistService.edit(appointmentId, dto);		 	
@@ -55,6 +59,7 @@ private final AppointmentPhysiotherapistService appointmentPhysiotherapistServic
 	      return ResponseEntity.notFound().build();
 	   }
 	 
+	 @PreAuthorize("hasAuthority('CANCEL_PHYSIOTHERAPIST_APPOINTMENT_PERMISSION')")
 	 @DeleteMapping(value = "{appointmentId}")
 	 public ResponseEntity<HttpStatus> delete(@PathVariable Long appointmentId) {	
 		    appointmentPhysiotherapistService.delete(appointmentId);		 	

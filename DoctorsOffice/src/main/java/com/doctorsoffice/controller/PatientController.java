@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +50,8 @@ public class PatientController {
 		this.appointmentService = appointmentService;
 		this.appointmentDoctorService = appointmentDoctorService;
 	}
-	
+	 
+	 @PreAuthorize("hasAuthority('FIND_PATIENT_PERMISSION')")
 	 @GetMapping(params = {"first-name", "last-name"})
 	 public ResponseEntity<List<PatientDTO>> findByFirstLastName(@RequestParam("first-name") String firstName,@RequestParam("last-name") String lastName) {	
 		 	List<Patient> patients = patientService.findAllByFirstNameAndLastName(firstName, lastName);
@@ -62,6 +64,7 @@ public class PatientController {
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('FIND_PATIENT_PERMISSION')")
 	 @GetMapping(params = "personal-ID" )
 	 public ResponseEntity<List<PatientDTO>> findByPersonalID(@RequestParam("personal-ID") String personalID) {	
 		 	List<Patient> patients = patientService.findAllByPersonalID(personalID);
@@ -74,11 +77,13 @@ public class PatientController {
 	        
 	    }
 	 
+	 @PreAuthorize("hasAuthority('CREATE_PATIENT_PERMISSION')")
 	 @PostMapping
 	    public ResponseEntity<NewPatientResponseDTO> create(@RequestBody NewPatientRequestDTO dto) {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(new NewPatientResponseDTO(patientService.create(dto)));
 		}
 	 
+	 @PreAuthorize("hasAuthority('FIND_PATIENT_APPOINTMENTS')")
 	 @GetMapping(value = "{patientId}/appointments")
 	 public ResponseEntity<List<AppointmentTermDTO>> findByPatientId(@PathVariable Long patientId) {	
 		 	List<Appointment> appointments = appointmentService.findAllByPatientId(patientId);
@@ -90,6 +95,7 @@ public class PatientController {
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('UPDATE_PATIENT_PERMISSION')")
 	 @PutMapping
 	 public ResponseEntity<HttpStatus> updatePatient(@RequestBody UpdatePatientDTO dto) {	
 		 	Patient patient = patientService.update(dto);
@@ -97,6 +103,7 @@ public class PatientController {
 		 	return ResponseEntity.ok().build();        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('GET_PATIENT_INFO_PERMISSION')")
 	 @GetMapping(value = "{patientId}")
 	 public ResponseEntity<PatientDTO> getPatientInfo(@PathVariable Long patientId) {	
 		 	Patient patient = patientService.findById(patientId);
@@ -104,6 +111,7 @@ public class PatientController {
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('GET_PATIENT_LAST_EXAMINATION_PERMISSION')")
 	 @GetMapping(value = "{patientId}/last-examination")
 	 public ResponseEntity<DoctorAppointmentDTO> findLastExaminationByPatientId(@PathVariable Long patientId) {	
 		 	AppointmentDoctor appointment = appointmentDoctorService.findLastExaminationByPatientId(patientId);
@@ -112,6 +120,7 @@ public class PatientController {
 	        
 	   }
 	 
+	 @PreAuthorize("hasAuthority('GET_PATIENT_MEDICAL_DOCUMENTATION_PERMISSION')")
 	 @GetMapping(value = "{patientId}/appointments/medical-documentation")
 	 public ResponseEntity<List<AppointmentDTO>> findMedicalDocumentationByPatientId(@PathVariable Long patientId) {	
 		 	List<Appointment> appointments = appointmentService.findAllByPatientId(patientId);
